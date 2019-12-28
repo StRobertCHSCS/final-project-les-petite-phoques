@@ -26,6 +26,17 @@ def draw_human(x, y):
     arcade.draw_rectangle_filled(x + 23, y - 50, 40, 20, arcade.color.LIGHT_BLUE, -340)
     arcade.draw_rectangle_filled(x - 23, y - 50, 40, 20, arcade.color.LIGHT_BLUE, 340)
 
+def draw_spaceship():
+    arcade.draw_ellipse_filled(260, 81, 5, 50, arcade.color.GREEN, 40)
+    arcade.draw_ellipse_filled(240, 81, 5, 50, arcade.color.GREEN, 140)
+    arcade.draw_ellipse_filled(250, 100, 80, 50, arcade.color.LIGHT_BLUE)
+    arcade.draw_ellipse_filled(250, 100, 110, 8, arcade.color.GREEN)
+
+    arcade.draw_ellipse_filled(760, 81, 5, 50, arcade.color.GREEN, 40)
+    arcade.draw_ellipse_filled(740, 81, 5, 50, arcade.color.GREEN, 140)
+    arcade.draw_ellipse_filled(750, 100, 80, 50, arcade.color.LIGHT_BLUE)
+    arcade.draw_ellipse_filled(750, 100, 110, 8, arcade.color.GREEN)
+
 
 def on_draw(delta_time):
     arcade.start_render()
@@ -62,6 +73,7 @@ def on_draw(delta_time):
     draw_alien(600, 200)
     draw_human(300, 200)
 
+    draw_spaceship()
 
 def main():
     arcade.open_window(1000, 750, "Fun Game")
