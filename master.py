@@ -6,25 +6,32 @@ def draw_stars(x, y):
 
 
 def draw_alien(x, y):
-    arcade.draw_circle_filled(x, y, 40, arcade.color.PURPLE)
-    arcade.draw_rectangle_filled(x, y - 65, 80, 60, arcade.color.PURPLE, -90)
-    arcade.draw_rectangle_filled(x + 22, y - 100, 40, 20, arcade.color.PURPLE, -45)
-    arcade.draw_rectangle_filled(x - 22, y - 100, 40, 20, arcade.color.PURPLE, 45)
-    arcade.draw_rectangle_filled(x + 23, y - 50, 40, 20, arcade.color.PURPLE, -340)
-    arcade.draw_rectangle_filled(x - 23, y - 50, 40, 20, arcade.color.PURPLE, 340)
-    # point_list = ((x + 40, y + 40),
-              # (x + 80, y + 60),
-              # (x + 140, y + 50))
-    # arcade.draw_polygon_filled(point_list, arcade.color.PURPLE)
+    arcade.draw_circle_filled(x, y - 26, 24, arcade.color.LIGHT_BLUE)
+    arcade.draw_circle_filled(x, y - 28, 20, arcade.color.PURPLE)
+    arcade.draw_rectangle_filled(x, y - 65, 40, 30, arcade.color.PURPLE, -90)
+    arcade.draw_rectangle_filled(x + 15, y - 90, 20, 10, arcade.color.PURPLE, -60)
+    arcade.draw_rectangle_filled(x - 15, y - 90, 20, 10, arcade.color.PURPLE, 60)
+    arcade.draw_rectangle_filled(x + 23, y - 50, 20, 10, arcade.color.PURPLE, -340)
+    arcade.draw_rectangle_filled(x - 23, y - 50, 20, 10, arcade.color.PURPLE, 340)
+    point_list = ((x + 8, y - 12),
+              (x + 20, y + 5),
+              (x + 30, y - 10))
+    arcade.draw_polygon_filled(point_list, arcade.color.PURPLE)
+    point_list = ((x - 10, y - 12),
+              (x - 23, y + 5),
+              (x - 33, y - 10))
+    arcade.draw_polygon_filled(point_list, arcade.color.PURPLE)
 
 
 def draw_human(x, y):
-    arcade.draw_circle_filled(x, y, 40, arcade.color.LIGHT_BLUE)
-    arcade.draw_rectangle_filled(x, y - 65, 80, 60, arcade.color.LIGHT_BLUE, -90)
-    arcade.draw_rectangle_filled(x + 22, y - 100, 40, 20, arcade.color.LIGHT_BLUE, -45)
-    arcade.draw_rectangle_filled(x - 22, y - 100, 40, 20, arcade.color.LIGHT_BLUE, 45)
-    arcade.draw_rectangle_filled(x + 23, y - 50, 40, 20, arcade.color.LIGHT_BLUE, -340)
-    arcade.draw_rectangle_filled(x - 23, y - 50, 40, 20, arcade.color.LIGHT_BLUE, 340)
+    arcade.draw_circle_filled(x, y - 26, 24, arcade.color.PURPLE)
+    arcade.draw_circle_filled(x, y - 28, 20, arcade.color.LIGHT_BLUE)
+    arcade.draw_rectangle_filled(x, y - 65, 40, 30, arcade.color.LIGHT_BLUE, -90)
+    arcade.draw_rectangle_filled(x + 15, y - 90, 20, 10, arcade.color.LIGHT_BLUE, -60)
+    arcade.draw_rectangle_filled(x - 15, y - 90, 20, 10, arcade.color.LIGHT_BLUE, 60)
+    arcade.draw_rectangle_filled(x + 23, y - 50, 20, 10, arcade.color.LIGHT_BLUE, -340)
+    arcade.draw_rectangle_filled(x - 23, y - 50, 20, 10, arcade.color.LIGHT_BLUE, 340)
+
 
 def draw_spaceship():
     arcade.draw_ellipse_filled(260, 81, 5, 50, arcade.color.GREEN, 40)
@@ -40,7 +47,6 @@ def draw_spaceship():
 
 def on_draw(delta_time):
     arcade.start_render()
-
     draw_stars(30, 100)
     draw_stars(50, 50)
     draw_stars(400, 200)
@@ -69,11 +75,13 @@ def on_draw(delta_time):
     draw_stars(930, 349)
     draw_stars(950, 503)
     draw_stars(980, 123)
-    
-    draw_alien(600, 200)
-    draw_human(300, 200)
-
+   
+    draw_alien(250, 500)
+    draw_human(750, 500)
     draw_spaceship()
+
+    arcade.draw_lrtb_rectangle_filled(495, 505, 750, 0, arcade.color.BLACK)
+
 
 def main():
     arcade.open_window(1000, 750, "Fun Game")
