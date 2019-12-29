@@ -27,8 +27,18 @@ for _ in range(10):
     alien_x_positions.append(x_alien)
     alien_y_positions.append(y_alien)
 
-# stars_x = random.randrange(0, WIDTH)
-# stars_y = random.randrange(0, HEIGHT)
+spaceship_human_x = 260
+spaceship_human_y = 81
+spaceship_alien_x = 760
+spaceship_alien_y = 81
+
+up_pressed_human = False
+left_pressed_human = False
+right_pressed_human = False
+
+up_pressed_alien = False
+left_pressed_alien = False
+right_pressed_alien = False
 
 def draw_stars(x, y):
     arcade.draw_circle_filled(x, y, 5, arcade.color.YELLOW)
@@ -62,30 +72,18 @@ def draw_human(x, y):
     arcade.draw_rectangle_filled(x - 23, y - 50, 20, 10, arcade.color.LIGHT_BLUE, 340)
 
 
-def draw_spaceship():
-    arcade.draw_ellipse_filled(260, 81, 5, 50, arcade.color.GREEN, 40)
-    arcade.draw_ellipse_filled(240, 81, 5, 50, arcade.color.GREEN, 140)
-    arcade.draw_ellipse_filled(250, 100, 80, 50, arcade.color.LIGHT_BLUE)
-    arcade.draw_ellipse_filled(250, 100, 110, 8, arcade.color.GREEN)
-
-    arcade.draw_ellipse_filled(760, 81, 5, 50, arcade.color.GREEN, 40)
-    arcade.draw_ellipse_filled(740, 81, 5, 50, arcade.color.GREEN, 140)
-    arcade.draw_ellipse_filled(750, 100, 80, 50, arcade.color.LIGHT_BLUE)
-    arcade.draw_ellipse_filled(750, 100, 110, 8, arcade.color.GREEN)
+def draw_spaceship_human(x, y):
+    arcade.draw_ellipse_filled(x, y, 5, 50, arcade.color.GREEN, 40)
+    arcade.draw_ellipse_filled(x - 20, y, 5, 50, arcade.color.GREEN, 140)
+    arcade.draw_ellipse_filled(x - 10, y + 19, 80, 50, arcade.color.LIGHT_BLUE)
+    arcade.draw_ellipse_filled(x - 10, y + 19, 110, 8, arcade.color.GREEN)
 
 
-def setup():
-    arcade.open_window(1000, 750, "Fun Game")
-    arcade.set_background_color(arcade.color.DARK_BLUE)
-    
-    window = arcade.get_window()
-    window.on_draw = on_draw
-    window.on_key_press = on_key_press
-    window.on_key_release = on_key_release
-    window.on_mouse_press = on_mouse_press
-
-    arcade.schedule(update, 1/100)    
-    arcade.run()
+def draw_spaceship_alien(x, y):
+    arcade.draw_ellipse_filled(x, y, 5, 50, arcade.color.GREEN, 40)
+    arcade.draw_ellipse_filled(x - 20, y, 5, 50, arcade.color.GREEN, 140)
+    arcade.draw_ellipse_filled(x - 10, y + 19, 80, 50, arcade.color.LIGHT_BLUE)
+    arcade.draw_ellipse_filled(x - 10, y + 19, 110, 8, arcade.color.GREEN)
 
 
 def update(delta_time):
@@ -103,8 +101,23 @@ def update(delta_time):
             alien_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
             alien_x_positions[index] = random.randrange(0, WIDTH/2 - 25)
 
+    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, spaceship_human_x, spaceship_alien_x
+    if left_pressed_human:
+        spaceship_human_x -= 5
+
+    if left_pressed_alien:
+        spaceship_alien_x -= 5
+    
+    if right_pressed_human:
+        spaceship_human_x += 5
+
+    if right_pressed_alien:
+        spaceship_alien_x += 5
+
 
 def on_draw():
+    global spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y
+    
     arcade.start_render()
 
     # draw_stars(30, 100)
@@ -136,8 +149,8 @@ def on_draw():
     # draw_stars(950, 503)
     # draw_stars(980, 123)
     
-    for _ in range(50):
-        draw_stars(random.randrange(0, WIDTH), random.randrange(0, HEIGHT))
+    # for _ in range(50):
+    #     draw_stars(random.randrange(0, WIDTH), random.randrange(0, HEIGHT))
 
     for x_human, y_human in zip(human_x_positions, human_y_positions):
         draw_human(x_human, y_human)
@@ -145,21 +158,59 @@ def on_draw():
     for x_alien, y_alien in zip(alien_x_positions, alien_y_positions):
         draw_alien(x_alien, y_alien)
     
-    draw_spaceship()
+    draw_spaceship_human(spaceship_human_x, spaceship_human_y)
+    draw_spaceship_alien(spaceship_alien_x, spaceship_alien_y)
 
     arcade.draw_lrtb_rectangle_filled(WIDTH/2 - 5, WIDTH/2 + 5, HEIGHT, 0, arcade.color.BLACK)
 
 
 def on_key_press(key, modifiers):
-    pass
+    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien
+
+    if key == arcade.key.A:
+        left_pressed_human = True
+     
+    if key == arcade.key.LEFT:
+        left_pressed_alien = True
+    
+    if key == arcade.key.D:
+        right_pressed_human = True
+
+    if key == arcade.key.RIGHT:
+        right_pressed_alien = True
 
 
 def on_key_release(key, modifiers):
-    pass
+    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien
+
+    if key == arcade.key.A:
+        left_pressed_human = False
+     
+    if key == arcade.key.LEFT:
+        left_pressed_alien = False
+    
+    if key == arcade.key.D:
+        right_pressed_human = False
+
+    if key == arcade.key.RIGHT:
+        right_pressed_alien = False
 
 
 def on_mouse_press(x, y, button, modifiers):
     pass
+
+
+def setup():
+    arcade.open_window(1000, 750, "Fun Game")
+    arcade.set_background_color(arcade.color.DARK_BLUE)
+    
+    window = arcade.get_window()
+    window.on_draw = on_draw
+    window.on_key_press = on_key_press
+    window.on_key_release = on_key_release
+
+    arcade.schedule(update, 1/100)    
+    arcade.run()
 
 
 # Call the main function to get the program started.
