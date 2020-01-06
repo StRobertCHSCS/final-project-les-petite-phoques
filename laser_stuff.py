@@ -105,12 +105,12 @@ def update(delta_time):
             alien_x_positions[index] = random.randrange(0, WIDTH/2 - 30)
 
     for index in range(len(human_y_positions_laser)):
-        if human_y_positions_laser[index] <750:
+        if human_y_positions_laser[index] <750 + 50:
             human_y_positions_laser[index] += 30
 
 
     for index in range(len(alien_y_positions_laser)):
-        if alien_y_positions_laser[index] < 750:
+        if alien_y_positions_laser[index] < 750 + 50:
             alien_y_positions_laser[index] += 30
     
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, spaceship_human_x, spaceship_alien_x
