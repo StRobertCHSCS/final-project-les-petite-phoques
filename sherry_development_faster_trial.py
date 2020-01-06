@@ -20,7 +20,7 @@ left_pressed_alien = False
 right_pressed_alien = False
 fire_laser_alien = False
 
-draw_enemy_rate = 3
+draw_enemy_rate = 2
 sec = 0
 mins = 0
 
