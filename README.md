@@ -2,7 +2,7 @@
 Welcome to Astronauts VS Aliens! This is an instruction guide to teach you how to play, so that you can have a great time! :)
 
 ## Objective of the game
-A new planet, currently named Planet Phoque, has just been discovered in deep space. It has habitable conditions, oxygen, and gravity extremely similar to Earth's. Humans from Earth are looking to colonize the planet and set up camps -- to finally fulfill their long-awaited dream of living in space! However, a new species of alien have also emerged from their home planet, hoping to claim the planet to set up an energy generation center. A full out war has started, with neither species willing to back down. 
+A new planet, currently named Planet Phoque, has just been discovered in deep space. It has habitable conditions, oxygen, and gravity extremely similar to Earth's. Humans from Earth are looking to colonize the planet and set up camps -- to finally fulfill a long-awaited dream of living in space! However, a new species of alien have also emerged from their home planet, hoping to claim the planet to set up an energy generation center. A full out war has started, with neither species willing to back down. 
 
 Both sides have agreed: whoever wins the war wins all rights to the planet!
 
