@@ -177,9 +177,7 @@ def on_draw():
         draw_human_laser(x_human_laser, y_human_laser)
     
     for x_alien_laser, y_alien_laser in zip(alien_x_positions_laser, alien_y_positions_laser):
-    
         draw_alien_laser(x_alien_laser, y_alien_laser)
-
 
     arcade.draw_lrtb_rectangle_filled(WIDTH/2 - 5, WIDTH/2 + 5, HEIGHT, 0, arcade.color.BLACK)
 
@@ -204,7 +202,6 @@ def on_key_press(key, modifiers):
         alien_x_positions_laser.append (spaceship_alien_x)
         alien_y_positions_laser.append (spaceship_alien_y)
     
-
     if key == arcade.key.W:
         fire_laser_human = True     
         human_x_positions_laser.append (spaceship_human_x)
@@ -226,7 +223,10 @@ def on_key_release(key, modifiers):
     if key == arcade.key.RIGHT:
         right_pressed_alien = False
 
-    if key == arcade.key.UP or key == arcade.key.W:
+    if key == arcade.key.UP: 
+        laser_fire_key = False
+
+    if key == arcade.key.W:
         laser_fire_key = False
 
 def on_mouse_press(x, y, button, modifiers):
