@@ -12,6 +12,10 @@ human_x_positions = []
 human_y_positions = []
 alien_x_positions = []
 alien_y_positions = []
+human_x_positions_laser = []
+human_y_positions_laser = []
+alien_x_positions_laser = []
+alien_y_positions_laser = []
 
 # loop 100 times
 for _ in range(10):
@@ -27,80 +31,93 @@ for _ in range(10):
     alien_x_positions.append(x_alien)
     alien_y_positions.append(y_alien)
 
-spaceship_human_x = 260
-spaceship_human_y = 81
-spaceship_alien_x = 760
-spaceship_alien_y = 81
+spaceship_human_x = 250
+spaceship_human_y = 100
+spaceship_alien_x = 750
+spaceship_alien_y = 100
+
+human_width = 60
+human_height = 80
+alien_width = 60
+alien_hight = 80
+
 
 up_pressed_human = False
 left_pressed_human = False
 right_pressed_human = False
+fire_laser_human = False
 
 up_pressed_alien = False
 left_pressed_alien = False
 right_pressed_alien = False
+fire_laser_alien = False
 
 def draw_stars(x, y):
     arcade.draw_circle_filled(x, y, 5, arcade.color.YELLOW)
 
 
 def draw_alien(x, y):
-    arcade.draw_circle_filled(x, y - 26, 24, arcade.color.LIGHT_BLUE)
-    arcade.draw_circle_filled(x, y - 28, 20, arcade.color.PURPLE)
-    arcade.draw_rectangle_filled(x, y - 65, 40, 30, arcade.color.PURPLE, -90)
-    arcade.draw_rectangle_filled(x + 15, y - 90, 20, 10, arcade.color.PURPLE, -60)
-    arcade.draw_rectangle_filled(x - 15, y - 90, 20, 10, arcade.color.PURPLE, 60)
-    arcade.draw_rectangle_filled(x + 23, y - 50, 20, 10, arcade.color.PURPLE, -340)
-    arcade.draw_rectangle_filled(x - 23, y - 50, 20, 10, arcade.color.PURPLE, 340)
-    point_list = ((x + 8, y - 12),
-              (x + 20, y + 5),
-              (x + 30, y - 10))
-    arcade.draw_polygon_filled(point_list, arcade.color.PURPLE)
-    point_list = ((x - 10, y - 12),
-              (x - 23, y + 5),
-              (x - 33, y - 10))
-    arcade.draw_polygon_filled(point_list, arcade.color.PURPLE)
+    scale = 0.05
+    texture = arcade.load_texture("alien.png")
+    arcade.draw_texture_rectangle(x, y, scale * texture.width, 
+                            scale * texture.height, texture, 0)
 
+def draw_alien_laser(x, y):
+    scale = 0.1
+    texture = arcade.load_texture("laser.png")
+    arcade.draw_texture_rectangle(x, y, scale * texture.width, 
+                            scale * texture.height, texture, 0)
 
 def draw_human(x, y):
-    arcade.draw_circle_filled(x, y - 26, 24, arcade.color.PURPLE)
-    arcade.draw_circle_filled(x, y - 28, 20, arcade.color.LIGHT_BLUE)
-    arcade.draw_rectangle_filled(x, y - 65, 40, 30, arcade.color.LIGHT_BLUE, -90)
-    arcade.draw_rectangle_filled(x + 15, y - 90, 20, 10, arcade.color.LIGHT_BLUE, -60)
-    arcade.draw_rectangle_filled(x - 15, y - 90, 20, 10, arcade.color.LIGHT_BLUE, 60)
-    arcade.draw_rectangle_filled(x + 23, y - 50, 20, 10, arcade.color.LIGHT_BLUE, -340)
-    arcade.draw_rectangle_filled(x - 23, y - 50, 20, 10, arcade.color.LIGHT_BLUE, 340)
+    scale = 0.05
+    texture = arcade.load_texture("astronaut.png")
+    arcade.draw_texture_rectangle(x, y, scale * texture.width, 
+                            scale * texture.height, texture, 0)
 
+def draw_human_laser(x, y):
+    scale = 0.1 
+    texture = arcade.load_texture("laser.png")
+    arcade.draw_texture_rectangle(x, y, scale * texture.width, 
+                            scale * texture.height, texture, 0)
 
 def draw_spaceship_human(x, y):
-    arcade.draw_ellipse_filled(x, y, 5, 50, arcade.color.GREEN, 40)
-    arcade.draw_ellipse_filled(x - 20, y, 5, 50, arcade.color.GREEN, 140)
-    arcade.draw_ellipse_filled(x - 10, y + 19, 80, 50, arcade.color.LIGHT_BLUE)
-    arcade.draw_ellipse_filled(x - 10, y + 19, 110, 8, arcade.color.GREEN)
+    arcade.draw_ellipse_filled(x + 10, y - 19, 5, 50, arcade.color.GREEN, 40)
+    arcade.draw_ellipse_filled(x - 10, y - 19, 5, 50, arcade.color.GREEN, 140)
+    arcade.draw_ellipse_filled(x, y, 80, 50, arcade.color.LIGHT_BLUE)
+    arcade.draw_ellipse_filled(x, y, 110, 8, arcade.color.GREEN)
 
 
 def draw_spaceship_alien(x, y):
-    arcade.draw_ellipse_filled(x, y, 5, 50, arcade.color.GREEN, 40)
-    arcade.draw_ellipse_filled(x - 20, y, 5, 50, arcade.color.GREEN, 140)
-    arcade.draw_ellipse_filled(x - 10, y + 19, 80, 50, arcade.color.LIGHT_BLUE)
-    arcade.draw_ellipse_filled(x - 10, y + 19, 110, 8, arcade.color.GREEN)
+    arcade.draw_ellipse_filled(x + 10, y - 19, 5, 50, arcade.color.GREEN, 40)
+    arcade.draw_ellipse_filled(x - 10, y - 19, 5, 50, arcade.color.GREEN, 140)
+    arcade.draw_ellipse_filled(x, y, 80, 50, arcade.color.LIGHT_BLUE)
+    arcade.draw_ellipse_filled(x, y, 110, 8, arcade.color.GREEN)
 
 
 def update(delta_time):
     for index in range(len(human_y_positions)):
-        human_y_positions[index] -= 5
+        human_y_positions[index] -= 3
 
         if human_y_positions[index] < 0:
             human_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
-            human_x_positions[index] = random.randrange(WIDTH/2 + 25, WIDTH)
+            human_x_positions[index] = random.randrange(WIDTH/2 + 30, WIDTH)
 
     for index in range(len(alien_y_positions)):
-        alien_y_positions[index] -= 5
+        alien_y_positions[index] -= 3
 
         if alien_y_positions[index] < 0:
             alien_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
-            alien_x_positions[index] = random.randrange(0, WIDTH/2 - 25)
+            alien_x_positions[index] = random.randrange(0, WIDTH/2 - 30)
 
+    for index in range(len(human_y_positions_laser)):
+        if human_y_positions_laser[index] < 800:
+            human_y_positions_laser[index] += 30
+
+
+    for index in range(len(alien_y_positions_laser)):
+        if alien_y_positions_laser[index] < 800:
+            alien_y_positions_laser[index] += 30
+    
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, spaceship_human_x, spaceship_alien_x
     if left_pressed_human:
         spaceship_human_x -= 5
@@ -160,12 +177,19 @@ def on_draw():
     
     draw_spaceship_human(spaceship_human_x, spaceship_human_y)
     draw_spaceship_alien(spaceship_alien_x, spaceship_alien_y)
+    
+    
+    for x_human_laser, y_human_laser in zip(human_x_positions_laser, human_y_positions_laser):
+        draw_human_laser(x_human_laser, y_human_laser)
+    
+    for x_alien_laser, y_alien_laser in zip(alien_x_positions_laser, alien_y_positions_laser):
+        draw_alien_laser(x_alien_laser, y_alien_laser)
 
     arcade.draw_lrtb_rectangle_filled(WIDTH/2 - 5, WIDTH/2 + 5, HEIGHT, 0, arcade.color.BLACK)
 
 
 def on_key_press(key, modifiers):
-    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien
+    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, fire_laser_human, fire_laser_alien, spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y
 
     if key == arcade.key.A:
         left_pressed_human = True
@@ -179,9 +203,19 @@ def on_key_press(key, modifiers):
     if key == arcade.key.RIGHT:
         right_pressed_alien = True
 
+    if key == arcade.key.UP:
+        fire_laser_alien = True     
+        alien_x_positions_laser.append (spaceship_alien_x)
+        alien_y_positions_laser.append (spaceship_alien_y)
+    
+    if key == arcade.key.W:
+        fire_laser_human = True     
+        human_x_positions_laser.append (spaceship_human_x)
+        human_y_positions_laser.append (spaceship_human_y)
+        
 
 def on_key_release(key, modifiers):
-    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien
+    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, laser_fire_key
 
     if key == arcade.key.A:
         left_pressed_human = False
@@ -195,6 +229,11 @@ def on_key_release(key, modifiers):
     if key == arcade.key.RIGHT:
         right_pressed_alien = False
 
+    if key == arcade.key.UP: 
+        laser_fire_key = False
+        
+    if key == arcade.key.W:
+        laser_fire_key = False
 
 def on_mouse_press(x, y, button, modifiers):
     pass
