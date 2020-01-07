@@ -34,7 +34,7 @@ for _ in range(10):
 spaceship_human_x = 260
 spaceship_human_y = 81
 spaceship_alien_x = 760
-spaceship_alien_y = 81
+spaceship_alien_y = 80
 
 up_pressed_human = False
 left_pressed_human = False

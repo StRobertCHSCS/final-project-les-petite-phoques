@@ -20,9 +20,10 @@ left_pressed_alien = False
 right_pressed_alien = False
 fire_laser_alien = False
 
-draw_enemy_rate = 2
+
 sec = 0
 mins = 0
+
 
 # first set up empty lists
 human_x_positions = []
@@ -34,30 +35,34 @@ human_y_positions_laser = []
 alien_x_positions_laser = []
 alien_y_positions_laser = []
 
-def draw_enemy():
+draw_enemy_rate = 5
+sec = 0
+mins = 0
+
 # loop 100 times
-    for _ in range(draw_enemy_rate):
-        # generate random x and y values
-        x_human = random.randrange(WIDTH/2 + 60, WIDTH - 20)
-        y_human = random.randrange(HEIGHT, HEIGHT*2)
-        x_alien = random.randrange(20, WIDTH/2 - 60)
-        y_alien = random.randrange(HEIGHT, HEIGHT*2)
+for _ in range(draw_enemy_rate):
+    # generate random x and y values
+    x_human = random.randrange(WIDTH/2 + 60, WIDTH - 20)
+    y_human = random.randrange(HEIGHT, HEIGHT*2)
+    x_alien = random.randrange(20, WIDTH/2 - 60)
+    y_alien = random.randrange(HEIGHT, HEIGHT*2)
 
-        # append the x and y values to the appropriate list
-        human_x_positions.append(x_human)
-        human_y_positions.append(y_human)
-        alien_x_positions.append(x_alien)
-        alien_y_positions.append(y_alien)
+    # append the x and y values to the appropriate list
+    human_x_positions.append(x_human)
+    human_y_positions.append(y_human)
+    alien_x_positions.append(x_alien)
+    alien_y_positions.append(y_alien)
 
-    if sec == 30:
-        draw_enemy_rate += 1
+if sec == 30:
+    draw_enemy_rate += 1
+    print(draw_enemy_rate)
 
 def draw_stars(x, y):
     arcade.draw_circle_filled(x, y, 5, arcade.color.YELLOW)
 
 
 def draw_alien(x, y):
-    scale = 0.05
+    scale = 0.01
     texture = arcade.load_texture("alien.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
                             scale * texture.height, texture, 0)
@@ -69,7 +74,7 @@ def draw_alien_laser(x, y):
                             scale * texture.height, texture, 0)
 
 def draw_human(x, y):
-    scale = 0.051
+    scale = 0.01
     texture = arcade.load_texture("astronaut.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
                             scale * texture.height, texture, 0)
@@ -93,7 +98,6 @@ def draw_spaceship_alien(x, y):
     arcade.draw_ellipse_filled(x, y, 80, 50, arcade.color.LIGHT_BLUE)
     arcade.draw_ellipse_filled(x, y, 110, 8, arcade.color.GREEN)
 
-
 def start_timer():
     import time
     import sys
@@ -103,11 +107,11 @@ def start_timer():
     time_start = time.time()
 
     while True:
-        print("{seconds} Seconds".format(seconds=sec))
         sys.stdout.flush()
         time.sleep(1)
         sec = int(time.time() - time_start) - mins * 60
-
+        if sec >= 30:
+            sec = 0
 
 def update(delta_time):
     for index in range(len(human_y_positions)):
@@ -207,8 +211,6 @@ def on_draw():
     
     for x_alien_laser, y_alien_laser in zip(alien_x_positions_laser, alien_y_positions_laser):
         draw_alien_laser(x_alien_laser, y_alien_laser)
-
-    start_timer()
 
     arcade.draw_lrtb_rectangle_filled(WIDTH/2 - 5, WIDTH/2 + 5, HEIGHT, 0, arcade.color.BLACK)
 
