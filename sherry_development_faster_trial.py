@@ -194,7 +194,7 @@ def setup():
     window.on_key_press = on_key_press
     window.on_key_release = on_key_release
 
-    arcade.schedule(update, 1/100)    
+    arcade.schedule(update, 1/1000)    
     arcade.run()
 
 
