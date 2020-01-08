@@ -63,7 +63,7 @@ def draw_alien(x, y):
                             scale * texture.height, texture, 0)
 
 def draw_alien_laser(x, y):
-    scale = 0.3
+    scale = 0.1
     texture = arcade.load_texture("laser.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
                             scale * texture.height, texture, 0)
@@ -75,7 +75,7 @@ def draw_human(x, y):
                             scale * texture.height, texture, 0)
 
 def draw_human_laser(x, y):
-    scale = 0.03
+    scale = 0.1
     texture = arcade.load_texture("laser.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
                             scale * texture.height, texture, 0)

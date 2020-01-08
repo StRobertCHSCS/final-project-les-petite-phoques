@@ -62,7 +62,7 @@ def draw_stars(x, y):
 
 
 def draw_alien(x, y):
-    scale = 0.01
+    scale = 0.03
     texture = arcade.load_texture("alien.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
                             scale * texture.height, texture, 0)
@@ -74,7 +74,7 @@ def draw_alien_laser(x, y):
                             scale * texture.height, texture, 0)
 
 def draw_human(x, y):
-    scale = 0.01
+    scale = 0.03
     texture = arcade.load_texture("astronaut.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
                             scale * texture.height, texture, 0)
@@ -279,3 +279,8 @@ def setup():
 # Call the main function to get the program started.
 if __name__ == '__main__':
     setup()
+
+scale = 0.05
+    texture = arcade.load_texture("Spaceship.webp")
+    arcade.draw_texture_rectangle(x, y, scale * texture.width, 
+                            scale * texture.height, texture, 0)
