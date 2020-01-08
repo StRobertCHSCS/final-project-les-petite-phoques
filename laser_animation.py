@@ -14,6 +14,8 @@ alien_x_positions = []
 alien_y_positions = []
 meteor_x_positions = []
 meteor_y_positions = []
+alien_meteor_x_positions = []
+alien_meteor_y_positions = []
 human_x_positions_laser = []
 human_y_positions_laser = []
 alien_x_positions_laser = []
@@ -28,6 +30,8 @@ for _ in range(10):
     y_alien = random.randrange(HEIGHT, HEIGHT*2)
     x_meteor = random.randrange(WIDTH/2 + 25, WIDTH)
     y_meteor = random.randrange(HEIGHT, HEIGHT*2)
+    x_alien_meteor = random.randrange(0, WIDTH/2 - 25)
+    y_alien_meteor = random.randrange(HEIGHT, HEIGHT*2)
 
     # append the x and y values to the appropriate list
     human_x_positions.append(x_human)
@@ -36,11 +40,23 @@ for _ in range(10):
     alien_y_positions.append(y_alien)
     meteor_x_positions.append(x_meteor)
     meteor_y_positions.append(y_meteor)
+    alien_meteor_x_positions.append(x_alien_meteor)
+    alien_meteor_y_positions.append(y_alien_meteor)
 
 spaceship_human_x = 260
 spaceship_human_y = 81
 spaceship_alien_x = 760
 spaceship_alien_y = 80
+
+alien_width =
+alien_height =
+human_width =
+human_height =
+meteor_height =
+meteor_width =
+alien_meteor_width =
+alien_meteor_height =
+
 
 up_pressed_human = False
 left_pressed_human = False
@@ -63,7 +79,7 @@ def draw_alien(x, y):
                             scale * texture.height, texture, 0)
 
 def draw_alien_laser(x, y):
-    scale = 0.3
+    scale = 0.1
     texture = arcade.load_texture("laser.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
                             scale * texture.height, texture, 0)
@@ -75,12 +91,18 @@ def draw_human(x, y):
                             scale * texture.height, texture, 0)
 
 def draw_human_laser(x, y):
-    scale = 0.03
+    scale = 0.1
     texture = arcade.load_texture("laser.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
                             scale * texture.height, texture, 0)
 
 def draw_meteor(x, y):
+    scale = 0.05
+    texture = arcade.load_texture("meteor.png")
+    arcade.draw_texture_rectangle(x, y, scale * texture.width, 
+                            scale * texture.height, texture, 0)
+
+def draw_alien_meteor(x, y):
     scale = 0.05
     texture = arcade.load_texture("meteor.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
@@ -121,6 +143,13 @@ def update(delta_time):
         if meteor_y_positions[index] < 0:
             meteor_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
             meteor_x_positions[index] = random.randrange(WIDTH/2 + 30, WIDTH)
+
+    for index in range(len(alien_meteor_y_positions)):
+        alien_meteor_y_positions[index] -= 3
+
+        if alien_meteor_y_positions[index] < 0:
+            alien_meteor_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
+            alien_meteor_x_positions[index] = random.randrange(WIDTH/2 - 30, WIDTH)  
 
     for index in range(len(human_y_positions_laser)):
         if human_y_positions_laser[index] < 800:
@@ -191,6 +220,9 @@ def on_draw():
 
     for x_meteor, y_meteor in zip(meteor_x_positions, meteor_y_positions):
         draw_meteor(x_meteor, y_meteor)
+    
+    for x_alien_meteor, y_alien_meteor in zip(alien_meteor_x_positions, alien_meteor_y_positions):
+        draw_alien_meteor(x_alien_meteor, y_alien_meteor)
 
     draw_spaceship_human(spaceship_human_x, spaceship_human_y)
     draw_spaceship_alien(spaceship_alien_x, spaceship_alien_y)
