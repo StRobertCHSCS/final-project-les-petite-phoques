@@ -160,27 +160,27 @@ def start_timer():
 
 def laser_human_collision():
 
+    for x_human in human_x_positions and y_human in human_y_positions:
+        human_hit = False 
+        del human_x_positions[human_index]
+        del human_y_positions[human_index]
 
-    human_hit = False 
-    del human_x_positions[human_index]
-    del human_y_positions[human_index]
-
-    del human_x_positions_laser[human_laser_index]
-    del human_y_positions_laser[human_laser_index]
-    human_hit = True 
-    break 
+        del human_x_positions_laser[human_laser_index]
+        del human_y_positions_laser[human_laser_index]
+        human_hit = True 
+        break 
 
 def laser_alien_collision():
    
+    for x_alien in alien_x_positions and y_alien in alien_y_positions: 
+        alien_hit = False
+        del alien_x_positions[human_index]
+        del alien_y_positions[human_index]    
 
-    alien_hit = False
-    del alien_x_positions[human_index]
-    del alien_y_positions[human_index]    
-
-    del alien_x_positions_laser[human_laser_index]
-    del alien_y_positions_laser[human_laser_index]
-    alien_hit = True 
-    break
+        del alien_x_positions_laser[human_laser_index]
+        del alien_y_positions_laser[human_laser_index]
+        alien_hit = True 
+        break
 
 def update(delta_time):
     for index in range(len(human_y_positions)):
