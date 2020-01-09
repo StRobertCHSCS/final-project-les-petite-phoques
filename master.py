@@ -163,28 +163,28 @@ def update(delta_time):
 
         if human_y_positions[index] < 0:
             human_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
-            human_x_positions[index] = random.randrange(WIDTH/2 + 30, WIDTH)
+            human_x_positions[index] = random.randrange(WIDTH/2 + 75, WIDTH - 75)
 
     for index in range(len(alien_y_positions)):
         alien_y_positions[index] -= 3
 
         if alien_y_positions[index] < 0:
             alien_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
-            alien_x_positions[index] = random.randrange(0, WIDTH/2 - 30)
+            alien_x_positions[index] = random.randrange(75, WIDTH/2 - 75)
 
     for index in range(len(meteor_y_positions)):
         meteor_y_positions[index] -= 3
 
         if meteor_y_positions[index] < 0:
             meteor_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
-            meteor_x_positions[index] = random.randrange(WIDTH/2 + 30, WIDTH)
+            meteor_x_positions[index] = random.randrange(WIDTH/2 + 75, WIDTH - 75)
 
     for index in range(len(alien_meteor_y_positions)):
         alien_meteor_y_positions[index] -= 3
 
         if alien_meteor_y_positions[index] < 0:
             alien_meteor_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
-            alien_meteor_x_positions[index] = random.randrange(WIDTH/2 - 30, WIDTH)  
+            alien_meteor_x_positions[index] = random.randrange(75, WIDTH/2 - 75)  
 
     for index in range(len(human_y_positions_laser)):
         if human_y_positions_laser[index] < 800:

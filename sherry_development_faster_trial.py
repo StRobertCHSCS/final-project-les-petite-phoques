@@ -23,8 +23,13 @@ alien_y_positions_laser = []
 
 draw_enemy_rate = 3
 draw_meteor_rate = 1
-sec = 0
-mins = 0
+
+elapsed_time = 0
+time = True
+
+if elapsed_time > 30 or 60 or 90:
+    draw_enemy_rate += 1
+    draw_meteor_rate += 1
 
 # loop 100 times
 for _ in range(draw_enemy_rate):
@@ -53,9 +58,6 @@ for _ in range(draw_meteor_rate): #this is the meteor's repeat, and i made it a 
     alien_meteor_x_positions.append(x_alien_meteor)
     alien_meteor_y_positions.append(y_alien_meteor)
 
-if sec == 30:
-    draw_enemy_rate += 1
-    draw_meteor_rate += 1
 
 spaceship_human_x = 250
 spaceship_human_y = 100
@@ -81,8 +83,6 @@ left_pressed_alien = False
 right_pressed_alien = False
 fire_laser_alien = False
 
-sec = 0
-mins = 0
 
 def draw_stars(x, y):
     arcade.draw_circle_filled(x, y, 5, arcade.color.YELLOW)
@@ -143,19 +143,7 @@ def draw_spaceship_alien(x, y):
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
                             scale * texture.height, texture, 0)
 
-def start_timer():
-    import time
-    import sys
-    global sec
-    global mins
 
-    time_start = time.time()
-
-    while True:
-        time.sleep(1)
-        sec = int(time.time() - time_start) - mins * 60
-        if sec > 30:
-            sec = 0
 
 def update(delta_time):
     for index in range(len(human_y_positions)):
@@ -163,28 +151,28 @@ def update(delta_time):
 
         if human_y_positions[index] < 0:
             human_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
-            human_x_positions[index] = random.randrange(WIDTH/2 + 30, WIDTH)
+            human_x_positions[index] = random.randrange(WIDTH/2 + 75, WIDTH - 75)
 
     for index in range(len(alien_y_positions)):
         alien_y_positions[index] -= 3
 
         if alien_y_positions[index] < 0:
             alien_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
-            alien_x_positions[index] = random.randrange(0, WIDTH/2 - 30)
+            alien_x_positions[index] = random.randrange(75, WIDTH/2 - 75)
 
     for index in range(len(meteor_y_positions)):
         meteor_y_positions[index] -= 3
 
         if meteor_y_positions[index] < 0:
             meteor_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
-            meteor_x_positions[index] = random.randrange(WIDTH/2 + 30, WIDTH)
+            meteor_x_positions[index] = random.randrange(WIDTH/2 + 75, WIDTH - 75)
 
     for index in range(len(alien_meteor_y_positions)):
         alien_meteor_y_positions[index] -= 3
 
         if alien_meteor_y_positions[index] < 0:
             alien_meteor_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
-            alien_meteor_x_positions[index] = random.randrange(WIDTH/2 - 30, WIDTH)  
+            alien_meteor_x_positions[index] = random.randrange(75, WIDTH/2 - 75)  
 
     for index in range(len(human_y_positions_laser)):
         if human_y_positions_laser[index] < 800:
@@ -193,9 +181,8 @@ def update(delta_time):
     for index in range(len(alien_y_positions_laser)):
         if alien_y_positions_laser[index] < 800:
             alien_y_positions_laser[index] += 30
-    
-    
-    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, spaceship_human_x, spaceship_alien_x
+     
+    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, spaceship_human_x, spaceship_alien_x, elapsed_time, time
     
     if left_pressed_human:
         spaceship_human_x -= 5
@@ -216,6 +203,13 @@ def update(delta_time):
         spaceship_alien_x += 5
         if spaceship_alien_x > 940:
             spaceship_alien_x = 940
+
+    if time == True:
+        elapsed_time += delta_time
+        round(elapsed_time)
+        print(elapsed_time)
+    elif time == False:
+        elapsed_time = 0
 
 
 def on_draw():
@@ -303,7 +297,7 @@ def on_key_press(key, modifiers):
         fire_laser_human = True     
         human_x_positions_laser.append (spaceship_human_x)
         human_y_positions_laser.append (spaceship_human_y)
-        
+
 
 def on_key_release(key, modifiers):
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, laser_fire_key
