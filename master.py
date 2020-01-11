@@ -25,6 +25,8 @@ draw_enemy_rate = 3
 draw_meteor_rate = 1
 sec = 0
 mins = 0
+star_x = random.randrange(0, WIDTH)
+star_y = random.randrange(0, HEIGHT)
 
 # loop 100 times
 for _ in range(draw_enemy_rate):
@@ -81,12 +83,18 @@ left_pressed_alien = False
 right_pressed_alien = False
 fire_laser_alien = False
 
-sec = 0
-mins = 0
+def draw_background(x, y):
+    scale = 1
+    texture = arcade.load_texture("night_sky.jpg")
+    arcade.draw_texture_rectangle(x, y, scale * texture.width, 
+                                    scale * texture.height, texture, 0)
 
-def draw_stars(x, y):
-    arcade.draw_circle_filled(x, y, 5, arcade.color.YELLOW)
-
+def draw_stars():
+    global star_x, star_y
+    scale = 0.05
+    texture = arcade.load_texture("star.png")
+    arcade.draw_texture_rectangle(star_x, star_y, scale * texture.width, 
+                                    scale * texture.height, texture, 0)
 
 def draw_alien(x, y):
     scale = 0.05
@@ -143,19 +151,6 @@ def draw_spaceship_alien(x, y):
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
                             scale * texture.height, texture, 0)
 
-def start_timer():
-    import time
-    import sys
-    global sec
-    global mins
-
-    time_start = time.time()
-
-    while True:
-        time.sleep(1)
-        sec = int(time.time() - time_start) - mins * 60
-        if sec > 30:
-            sec = 0
 
 def update(delta_time):
     for index in range(len(human_y_positions)):
@@ -194,7 +189,6 @@ def update(delta_time):
         if alien_y_positions_laser[index] < 800:
             alien_y_positions_laser[index] += 30
     
-    
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, spaceship_human_x, spaceship_alien_x
     
     if left_pressed_human:
@@ -222,6 +216,8 @@ def on_draw():
     global spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y
     
     arcade.start_render()
+    
+    draw_background(500, 375)
 
     # draw_stars(30, 100)
     # draw_stars(50, 50)
@@ -245,15 +241,12 @@ def on_draw():
     # draw_stars(725, 203)
     # draw_stars(750, 520)
     # draw_stars(780, 610)
-    # draw_stars(814, 230)
+    # draw_stars(814, 230)w
     # draw_stars(840, 491)
     # draw_stars(900, 602)
     # draw_stars(930, 349)
     # draw_stars(950, 503)
     # draw_stars(980, 123)
-    
-    # for _ in range(50):
-    #     draw_stars(random.randrange(0, WIDTH), random.randrange(0, HEIGHT))
 
     for x_human, y_human in zip(human_x_positions, human_y_positions):
         draw_human(x_human, y_human)
@@ -276,7 +269,7 @@ def on_draw():
     for x_alien_laser, y_alien_laser in zip(alien_x_positions_laser, alien_y_positions_laser):
         draw_alien_laser(x_alien_laser, y_alien_laser)
 
-    arcade.draw_lrtb_rectangle_filled(WIDTH/2 - 5, WIDTH/2 + 5, HEIGHT, 0, arcade.color.BLACK)
+    arcade.draw_lrtb_rectangle_filled(WIDTH/2 - 5, WIDTH/2 + 5, HEIGHT, 0, arcade.color.WHITE)
 
 
 def on_key_press(key, modifiers):
@@ -334,7 +327,7 @@ def on_mouse_press(x, y, button, modifiers):
 def setup():
     arcade.open_window(1000, 750, "Fun Game")
     arcade.set_background_color(arcade.color.DARK_BLUE)
-    
+
     window = arcade.get_window()
     window.on_draw = on_draw
     window.on_key_press = on_key_press
@@ -347,3 +340,4 @@ def setup():
 # Call the main function to get the program started.
 if __name__ == '__main__':
     setup()
+
