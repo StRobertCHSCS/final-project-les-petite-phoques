@@ -21,8 +21,8 @@ human_y_positions_laser = []
 alien_x_positions_laser = []
 alien_y_positions_laser = []
 
-draw_enemy_rate = 3
-draw_meteor_rate = 1
+draw_enemy_rate = 6
+draw_meteor_rate = 2
 sec = 0
 mins = 0
 
