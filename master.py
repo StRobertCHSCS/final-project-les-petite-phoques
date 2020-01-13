@@ -23,10 +23,9 @@ alien_y_positions_laser = []
 
 draw_enemy_rate = 3
 draw_meteor_rate = 1
-sec = 0
-mins = 0
-star_x = random.randrange(0, WIDTH)
-star_y = random.randrange(0, HEIGHT)
+
+elapsed_time = 0
+time = True
 
 # loop 100 times
 for _ in range(draw_enemy_rate):
@@ -55,23 +54,24 @@ for _ in range(draw_meteor_rate): #this is the meteor's repeat, and i made it a 
     alien_meteor_x_positions.append(x_alien_meteor)
     alien_meteor_y_positions.append(y_alien_meteor)
 
-if sec == 30:
-    draw_enemy_rate += 1
-    draw_meteor_rate += 1
-
-spaceship_human_x = 250
+spaceship_human_x = 750
 spaceship_human_y = 100
-spaceship_alien_x = 750
+spaceship_alien_x = 250
 spaceship_alien_y = 100
 
-# alien_width =
-# alien_height =
-# human_width =
-# human_height =
-# meteor_height =
-# meteor_width =
-# alien_meteor_width =
-# alien_meteor_height =
+alien_width = 60
+alien_height = 74
+human_width = 60
+human_height = 80
+meteor_height = 60 
+meteor_width = 60
+alien_meteor_width = 60
+alien_meteor_height = 60
+
+x_human_laser = 0
+y_human_laser = 0
+x_alien_laser = 0
+y_alien_laser = 0
 
 up_pressed_human = False
 left_pressed_human = False
@@ -83,18 +83,78 @@ left_pressed_alien = False
 right_pressed_alien = False
 fire_laser_alien = False
 
+run_game = False
+
+main_screen_alien_x = 10
+main_screen_alien_y = 10
+main_screen_human_x = 10
+main_screen_human_y = 740
+main_screen_meteor1_x = 0
+main_screen_meteor1_y = 225
+main_screen_meteor2_x = 1000
+main_screen_meteor2_y = 525
+
+def draw_main_screen(x, y):
+    global main_screen_alien_x, main_screen_alien_y, main_screen_human_x, main_screen_human_y, main_screen_meteor1_x, main_screen_meteor1_y, main_screen_meteor2_x, main_screen_meteor2_y
+
+    scale = 0.3
+    texture = arcade.load_texture("space.png")
+    arcade.draw_texture_rectangle(x, y, scale * texture.width, 
+                                    scale * texture.height, texture, 0)
+    
+    arcade.draw_text("Welcome to...", 385, 600, arcade.color.BLACK, 25)
+    arcade.draw_text("ASTRONAUTS VS ALIENS!", 30, 375, arcade.color.BLACK, 65)
+    arcade.draw_text("press space to start", 350, 130, arcade.color.BLACK, 25)
+
+    if main_screen_alien_x < 500:
+        main_screen_alien_x += 3
+        main_screen_alien_y += 4
+    elif main_screen_alien_x >= 500:
+        main_screen_alien_x += 3
+        main_screen_alien_y -= 4
+
+    scale = 0.08
+    texture = arcade.load_texture("alien.png")
+    arcade.draw_texture_rectangle(main_screen_alien_x, main_screen_alien_y, scale * texture.width, 
+                                                                scale * texture.height, texture, 0)
+
+    if main_screen_human_x < 500:
+        main_screen_human_x += 3
+        main_screen_human_y -= 4
+    elif main_screen_human_x >= 500:
+        main_screen_human_x += 3
+        main_screen_human_y += 4
+
+    scale = 0.08
+    texture = arcade.load_texture("astronaut.png")
+    arcade.draw_texture_rectangle(main_screen_human_x, main_screen_human_y, scale * texture.width, 
+                                                                    scale * texture.height, texture, 0)
+    
+    if main_screen_alien_x > 1000:
+        main_screen_meteor1_x += 5
+        main_screen_meteor2_x -= 5
+
+        scale = 0.08
+        texture = arcade.load_texture("meteor.png")
+        arcade.draw_texture_rectangle(main_screen_meteor1_x, main_screen_meteor1_y, scale * texture.width, 
+                                                                        scale * texture.height, texture, 0)
+
+        scale = 0.08
+        texture = arcade.load_texture("meteor.png")
+        arcade.draw_texture_rectangle(main_screen_meteor2_x, main_screen_meteor2_y, scale * texture.width, 
+                                                                        scale * texture.height, texture, 0)
+    
+
 def draw_background(x, y):
     scale = 1
     texture = arcade.load_texture("night_sky.jpg")
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
                                     scale * texture.height, texture, 0)
 
-def draw_stars():
-    global star_x, star_y
-    scale = 0.05
-    texture = arcade.load_texture("star.png")
-    arcade.draw_texture_rectangle(star_x, star_y, scale * texture.width, 
-                                    scale * texture.height, texture, 0)
+
+def draw_stars(x, y):
+    arcade.draw_circle_filled(x, y, 5, arcade.color.YELLOW)
+
 
 def draw_alien(x, y):
     scale = 0.05
@@ -152,6 +212,67 @@ def draw_spaceship_alien(x, y):
                             scale * texture.height, texture, 0)
 
 
+def laser_human_collision():
+    global human_x_positions_laser, human_y_positions_laser
+    global x_human_laser, y_human_laser
+    global human_width, human_height
+
+    human_hit = False 
+    human_index = 0
+    
+    for x_human, y_human in zip(human_x_positions, human_y_positions):
+        human_laser_index = 0
+
+        for x_human_laser, y_human_laser in zip(human_x_positions_laser, human_y_positions_laser):
+            if (x_human - human_width/2 <= x_human_laser <= x_human + human_width/2 ) and (y_human - human_height/2 <= y_human_laser <= y_human + human_height/2 ):
+              
+                del human_x_positions[human_index]
+                del human_y_positions[human_index]
+
+                del human_x_positions_laser[human_laser_index]
+                del human_y_positions_laser[human_laser_index]
+                human_hit = True 
+                break 
+            
+            else: human_laser_index +=1
+
+        if human_hit == False: 
+                human_index +=1
+        else: 
+            break
+
+
+def laser_alien_collision():
+    global alien_x_positions_laser, alien_y_positions_laser
+    global x_alien_laser, y_alien_laser
+    global alien_width, alien_height
+
+    alien_hit = False 
+    alien_index = 0
+
+    for x_alien, y_alien in zip(alien_x_positions, alien_y_positions):
+        alien_laser_index = 0
+
+        for x_alien_laser, y_alien_laser in zip(alien_x_positions_laser, alien_y_positions_laser):
+            if (x_alien - alien_width/2 <= x_alien_laser <= x_alien + alien_width/2 ) and (y_alien- alien_height/2 <= y_alien_laser <= y_alien + alien_height/2 ):
+              
+                del alien_x_positions[alien_index]
+                del alien_y_positions[alien_index]
+
+                del alien_x_positions_laser[alien_laser_index]
+                del alien_y_positions_laser[alien_laser_index]
+                alien_hit = True             
+                break 
+            
+
+            else: alien_laser_index +=1
+
+        if alien_hit == False: 
+                alien_index +=1
+        else: 
+            break
+
+
 def update(delta_time):
     for index in range(len(human_y_positions)):
         human_y_positions[index] -= 3
@@ -189,64 +310,49 @@ def update(delta_time):
         if alien_y_positions_laser[index] < 800:
             alien_y_positions_laser[index] += 30
     
-    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, spaceship_human_x, spaceship_alien_x
+    
+    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, spaceship_human_x, spaceship_alien_x, elapsed_time, time, draw_enemy_rate, draw_meteor_rate
     
     if left_pressed_human:
         spaceship_human_x -= 5
-        if spaceship_human_x < 60:
-            spaceship_human_x = 60
+        if spaceship_human_x < 570:
+            spaceship_human_x = 570
 
     if left_pressed_alien:
         spaceship_alien_x -= 5
-        if spaceship_alien_x < 570:
-            spaceship_alien_x = 570
+        if spaceship_alien_x < 60:
+            spaceship_alien_x = 60
 
     if right_pressed_human:
         spaceship_human_x += 5
-        if spaceship_human_x > 430:
-            spaceship_human_x = 430
+        if spaceship_human_x > 940:
+            spaceship_human_x = 940
 
     if right_pressed_alien:
         spaceship_alien_x += 5
-        if spaceship_alien_x > 940:
-            spaceship_alien_x = 940
+        if spaceship_alien_x > 430:
+            spaceship_alien_x = 430
 
+    if time == True:
+        round(int(delta_time), 3)
+        elapsed_time += delta_time
+        print(elapsed_time)
+    elif time == False:
+        elapsed_time = 0
 
-def on_draw():
-    global spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y
     
-    arcade.start_render()
-    
-    draw_background(500, 375)
+    if elapsed_time > 5.0:
+        draw_enemy_rate += 1
+        draw_meteor_rate += 1
+    elif elapsed_time > 10.0:
+        draw_enemy_rate = draw_enemy_rate
+        draw_meteor_rate = draw_meteor_rate
 
-    # draw_stars(30, 100)
-    # draw_stars(50, 50)
-    # draw_stars(400, 200)
-    # draw_stars(670, 340)
-    # draw_stars(500, 100)
-    # draw_stars(20, 700)
-    # draw_stars(700, 620)
-    # draw_stars(800, 560)
-    # draw_stars(430, 450)
-    # draw_stars(130, 360)
-    # draw_stars(200, 201)
-    # draw_stars(240, 459)
-    # draw_stars(280, 704)
-    # draw_stars(320, 10)
-    # draw_stars(360, 372)
-    # draw_stars(400, 503)
-    # draw_stars(510, 80)
-    # draw_stars(610, 123)
-    # draw_stars(650, 430)
-    # draw_stars(725, 203)
-    # draw_stars(750, 520)
-    # draw_stars(780, 610)
-    # draw_stars(814, 230)w
-    # draw_stars(840, 491)
-    # draw_stars(900, 602)
-    # draw_stars(930, 349)
-    # draw_stars(950, 503)
-    # draw_stars(980, 123)
+
+def draw_game():
+    laser_human_collision()
+    laser_alien_collision()
+
 
     for x_human, y_human in zip(human_x_positions, human_y_positions):
         draw_human(x_human, y_human)
@@ -272,52 +378,95 @@ def on_draw():
     arcade.draw_lrtb_rectangle_filled(WIDTH/2 - 5, WIDTH/2 + 5, HEIGHT, 0, arcade.color.WHITE)
 
 
-def on_key_press(key, modifiers):
-    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, fire_laser_human, fire_laser_alien, spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y
+def on_draw():
+    global spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, run_game
+    
+    arcade.start_render()
+    
+    draw_main_screen(500, 375)
+    
+    if run_game == True:
+        draw_background(500, 375)
+        laser_human_collision()
+        laser_alien_collision()
 
-    if key == arcade.key.A:
+        for x_human, y_human in zip(human_x_positions, human_y_positions):
+            draw_human(x_human, y_human)
+        
+        for x_alien, y_alien in zip(alien_x_positions, alien_y_positions):
+            draw_alien(x_alien, y_alien)
+
+        for x_meteor, y_meteor in zip(meteor_x_positions, meteor_y_positions):
+            draw_human_meteor(x_meteor, y_meteor)
+        
+        for x_alien_meteor, y_alien_meteor in zip(alien_meteor_x_positions, alien_meteor_y_positions):
+            draw_alien_meteor(x_alien_meteor, y_alien_meteor)
+
+        draw_spaceship_human(spaceship_human_x, spaceship_human_y)
+        draw_spaceship_alien(spaceship_alien_x, spaceship_alien_y)
+        
+        for x_human_laser, y_human_laser in zip(human_x_positions_laser, human_y_positions_laser):
+            draw_human_laser(x_human_laser, y_human_laser)
+        
+        for x_alien_laser, y_alien_laser in zip(alien_x_positions_laser, alien_y_positions_laser):
+            draw_alien_laser(x_alien_laser, y_alien_laser)
+
+        arcade.draw_lrtb_rectangle_filled(WIDTH/2 - 5, WIDTH/2 + 5, HEIGHT, 0, arcade.color.WHITE)
+    
+
+def on_key_press(key, modifiers):
+    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, fire_laser_human, fire_laser_alien, spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, run_game, delta_time
+
+    if key == arcade.key.LEFT:
         left_pressed_human = True
      
-    if key == arcade.key.LEFT:
+    if key == arcade.key.A:
         left_pressed_alien = True
     
-    if key == arcade.key.D:
+    if key == arcade.key.RIGHT:
         right_pressed_human = True
 
-    if key == arcade.key.RIGHT:
+    if key == arcade.key.D:
         right_pressed_alien = True
 
-    if key == arcade.key.UP:
+    if key == arcade.key.W:
         fire_laser_alien = True     
         alien_x_positions_laser.append (spaceship_alien_x)
         alien_y_positions_laser.append (spaceship_alien_y)
     
-    if key == arcade.key.W:
+    if key == arcade.key.UP:
         fire_laser_human = True     
         human_x_positions_laser.append (spaceship_human_x)
         human_y_positions_laser.append (spaceship_human_y)
+
+    if key == arcade.key.SPACE:
+        run_game = True
+        delta_time = 0
         
 
 def on_key_release(key, modifiers):
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, laser_fire_key
 
-    if key == arcade.key.A:
+    if key == arcade.key.LEFT:
         left_pressed_human = False
      
-    if key == arcade.key.LEFT:
+    if key == arcade.key.A:
         left_pressed_alien = False
     
-    if key == arcade.key.D:
+    if key == arcade.key.RIGHT:
         right_pressed_human = False
 
-    if key == arcade.key.RIGHT:
+    if key == arcade.key.D:
         right_pressed_alien = False
 
-    if key == arcade.key.UP: 
+    if key == arcade.key.W: 
         laser_fire_key = False
         
-    if key == arcade.key.W:
+    if key == arcade.key.UP:
         laser_fire_key = False
+
+    if key == arcade.key.SPACE:
+        pass
 
 
 def on_mouse_press(x, y, button, modifiers):
@@ -325,9 +474,8 @@ def on_mouse_press(x, y, button, modifiers):
 
 
 def setup():
-    arcade.open_window(1000, 750, "Fun Game")
-    arcade.set_background_color(arcade.color.DARK_BLUE)
-
+    arcade.open_window(1000, 750, "Astronauts VS Aliens!")
+    
     window = arcade.get_window()
     window.on_draw = on_draw
     window.on_key_press = on_key_press
@@ -340,4 +488,3 @@ def setup():
 # Call the main function to get the program started.
 if __name__ == '__main__':
     setup()
-
