@@ -21,8 +21,8 @@ human_y_positions_laser = []
 alien_x_positions_laser = []
 alien_y_positions_laser = []
 
-draw_enemy_rate = 3
-draw_meteor_rate = 1
+draw_enemy_rate = 6
+draw_meteor_rate = 2
 
 elapsed_time = 0
 time = True
@@ -212,6 +212,30 @@ def draw_spaceship_alien(x, y):
                             scale * texture.height, texture, 0)
 
 
+def add_more_humans():
+    global human_x_positions, human_y_positions
+
+    # generate random x and y values
+    x_human = random.randrange(WIDTH/2 + 75, WIDTH - 75)
+    y_human = random.randrange(HEIGHT, HEIGHT*2)
+
+    # append the x and y values to the appropriate list
+    human_x_positions.append(x_human)
+    human_y_positions.append(y_human)
+
+
+def add_more_aliens():
+    global alien_x_positions, alien_y_positions
+
+    # generate random x and y values
+    x_alien = random.randrange(75, WIDTH/2 - 75)
+    y_alien = random.randrange(HEIGHT, HEIGHT*2)
+
+    # append the x and y values to the appropriate list
+    alien_x_positions.append(x_alien)
+    alien_y_positions.append(y_alien)
+
+
 def laser_human_collision():
     global human_x_positions_laser, human_y_positions_laser
     global x_human_laser, y_human_laser
@@ -231,9 +255,11 @@ def laser_human_collision():
 
                 del human_x_positions_laser[human_laser_index]
                 del human_y_positions_laser[human_laser_index]
+                
                 human_hit = True 
+                add_more_humans()
                 break 
-            
+
             else: human_laser_index +=1
 
         if human_hit == False: 
@@ -261,10 +287,11 @@ def laser_alien_collision():
 
                 del alien_x_positions_laser[alien_laser_index]
                 del alien_y_positions_laser[alien_laser_index]
-                alien_hit = True             
+                
+                alien_hit = True                               
+                add_more_aliens()
                 break 
             
-
             else: alien_laser_index +=1
 
         if alien_hit == False: 
