@@ -40,6 +40,28 @@ for _ in range(draw_enemy_rate):
     alien_x_positions.append(x_alien)
     alien_y_positions.append(y_alien)
 
+def add_more_humans():
+    global human_x_positions, human_y_positions
+    
+    # generate random x and y values
+    x_human = random.randrange(WIDTH/2 + 75, WIDTH - 75)
+    y_human = random.randrange(HEIGHT, HEIGHT*2)
+    
+    # append the x and y values to the appropriate list
+    human_x_positions.append(x_human)
+    human_y_positions.append(y_human)
+
+def add_more_aliens():
+    global alien_x_positions, alien_y_positions
+
+    # generate random x and y values
+    x_alien = random.randrange(75, WIDTH/2 - 75)
+    y_alien = random.randrange(HEIGHT, HEIGHT*2)
+
+    # append the x and y values to the appropriate list
+    alien_x_positions.append(x_alien)
+    alien_y_positions.append(y_alien)
+
 for _ in range(draw_meteor_rate): #this is the meteor's repeat, and i made it a little less than the humans/aliens so there's less of them
     # generate random x and y values
     x_meteor = random.randrange(WIDTH/2 + 75, WIDTH - 75)
@@ -188,6 +210,7 @@ def laser_human_collision():
                 del human_x_positions_laser[human_laser_index]
                 del human_y_positions_laser[human_laser_index]
                 human_hit = True 
+                add_more_humans()
                 break 
             
             else: human_laser_index +=1
@@ -216,7 +239,8 @@ def laser_alien_collision():
 
                 del alien_x_positions_laser[alien_laser_index]
                 del alien_y_positions_laser[alien_laser_index]
-                alien_hit = True             
+                alien_hit = True                               
+                add_more_aliens()
                 break 
             
 
