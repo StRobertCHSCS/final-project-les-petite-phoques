@@ -31,9 +31,9 @@ time = False
 for _ in range(draw_enemy_rate):
     # generate random x and y values
     x_human = random.randrange(WIDTH/2 + 75, WIDTH - 75)
-    y_human = random.randrange(HEIGHT, HEIGHT + 50)
+    y_human = random.randrange(HEIGHT, HEIGHT * 2)
     x_alien = random.randrange(75, WIDTH/2 - 75)
-    y_alien = random.randrange(HEIGHT, HEIGHT + 50)
+    y_alien = random.randrange(HEIGHT, HEIGHT * 2)
 
     # append the x and y values to the appropriate list
     human_x_positions.append(x_human)
@@ -96,19 +96,20 @@ main_screen_meteor2_degree = 0
 
 alien_hit = False
 human_hit = False
+
 alien_points = 0
 human_points = 0
 
 
 def update(delta_time):
-    global elapsed_time
+    global elapsed_time, draw_enemy_rate, draw_meteor_rate
     
     if time == True:
         elapsed_time += delta_time
         elapsed_time = round(elapsed_time, 2)
-        # if elapsed_time == (30.00 or 60.00 or 90.00):
-            # draw_enemy_rate += 1
-            # draw_meteor_rate += 1
+        if elapsed_time == 5.00:
+            draw_enemy_rate += 1
+            draw_meteor_rate += 1
     
     for index in range(len(human_y_positions)):
         human_y_positions[index] -= 3
@@ -168,9 +169,15 @@ def update(delta_time):
     if right_pressed_alien:
         spaceship_alien_x += 5
         if spaceship_alien_x > 430:
-            spaceship_alien_x = 430
+            spaceship_alien_x = 430 
 
+    global human_hit, alien_hit, human_points, alien_points
 
+    if human_hit == True:
+        human_points += 1
+
+    if alien_hit == True:
+        alien_points += 1
 
 def draw_main_screen(x, y):
     global main_screen_alien_x, main_screen_alien_y, main_screen_human_x, main_screen_human_y, main_screen_meteor1_x, main_screen_meteor1_y, main_screen_meteor2_x, main_screen_meteor2_y, main_screen_meteor1_degree, main_screen_meteor2_degree
@@ -232,16 +239,12 @@ def draw_background(x, y):
                                     scale * texture.height, texture, 0)
 
 
-def alien_point_counter():
+def alien_points_counter():
     arcade.draw_text("Points: " + str(alien_points), 50, 600, arcade.color.WHITE, 15)
 
 
-def human_point_counter():
+def human_points_counter():
     arcade.draw_text("Points: " + str(human_points), 550, 600, arcade.color.WHITE, 15)
-
-
-def draw_stars(x, y):
-    arcade.draw_circle_filled(x, y, 5, arcade.color.YELLOW)
 
 
 def draw_human(x, y):
@@ -328,7 +331,8 @@ def laser_human_collision():
     global human_x_positions_laser, human_y_positions_laser
     global x_human_laser, y_human_laser
     global human_width, human_height, human_hit, human_points
-
+   
+    human_hit = False
     human_index = 0
     
     for x_human, y_human in zip(human_x_positions, human_y_positions):
@@ -342,24 +346,24 @@ def laser_human_collision():
                 del human_x_positions_laser[human_laser_index]
                 del human_y_positions_laser[human_laser_index]
                 
-                human_hit = True 
-                human_points += 1
-                add_more_humans() 
-                break
+                human_hit = True
+                add_more_humans()
+                human_points += 10
+                continue
 
             else: 
                 human_laser_index += 1
-
+                
         if human_hit == False: 
             human_index += 1
         else:
-            break
+            continue
 
 
 def laser_alien_collision():
     global alien_x_positions_laser, alien_y_positions_laser
     global x_alien_laser, y_alien_laser
-    global alien_width, alien_height, alien_hit, alien_points
+    global alien_width, alien_height, alien_points
 
     alien_hit = False
     alien_index = 0
@@ -376,18 +380,18 @@ def laser_alien_collision():
                 del alien_x_positions_laser[alien_laser_index]
                 del alien_y_positions_laser[alien_laser_index]
                 
-                alien_hit = True   
-                alien_points += 1            
+                alien_hit = True
                 add_more_aliens()
-                break
-            
+                alien_points += 10
+                continue
+                
             else: 
                 alien_laser_index += 1
-
+                
         if alien_hit == False: 
             alien_index += 1
         else:
-            break
+            continue
 
 
 def on_draw():
@@ -427,12 +431,12 @@ def on_draw():
 
         arcade.draw_lrtb_rectangle_filled(WIDTH/2 - 5, WIDTH/2 + 5, HEIGHT, 0, arcade.color.WHITE)
 
-        alien_point_counter()
-        human_point_counter()
+        alien_points_counter()
+        human_points_counter()
     
 
 def on_key_press(key, modifiers):
-    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, fire_laser_human, fire_laser_alien, spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, run_game, delta_time
+    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, fire_laser_human, fire_laser_alien, spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, run_game, time, delta_time
 
     if key == arcade.key.LEFT:
         left_pressed_human = True
@@ -458,7 +462,8 @@ def on_key_press(key, modifiers):
 
     if key == arcade.key.SPACE:
         run_game = True
-        delta_time = 0
+        time = False
+        delta_time = True
 
 
 def on_key_release(key, modifiers):
@@ -481,10 +486,6 @@ def on_key_release(key, modifiers):
         
     if key == arcade.key.UP:
         laser_fire_key = False
-
-
-def on_mouse_press(x, y, button, modifiers):
-    pass
 
 
 def setup():
