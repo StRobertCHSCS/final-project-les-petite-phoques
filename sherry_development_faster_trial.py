@@ -114,7 +114,7 @@ def update(delta_time):
         human_y_positions[index] -= 3
 
         if human_y_positions[index] < 0:
-            human_y_positions[index] = random.randrange(HEIGHT, HEIGHT+50)
+            human_y_positions[index] = random.randrange(HEIGHT, HEIGHT + 50)
             human_x_positions[index] = random.randrange(WIDTH/2 + 75, WIDTH - 75)
 
     for index in range(len(alien_y_positions)):
@@ -170,14 +170,6 @@ def update(delta_time):
         if spaceship_alien_x > 430:
             spaceship_alien_x = 430
 
-    
-    global alien_points, human_points
-    
-    if alien_hit == True:
-        alien_points += 1
-    
-    if human_hit == True:
-        human_points += 1
 
 
 def draw_main_screen(x, y):
@@ -335,32 +327,31 @@ def add_more_aliens():
 def laser_human_collision():
     global human_x_positions_laser, human_y_positions_laser
     global x_human_laser, y_human_laser
-    global human_width, human_height, human_hit
+    global human_width, human_height, human_hit, human_points
 
-    human_hit = False
     human_index = 0
     
     for x_human, y_human in zip(human_x_positions, human_y_positions):
         human_laser_index = 0
 
         for x_human_laser, y_human_laser in zip(human_x_positions_laser, human_y_positions_laser):
-            if (x_human - human_width/2 <= x_human_laser <= x_human + human_width/2 ) and (y_human - human_height/2 <= y_human_laser <= y_human + human_height/2 ):
-                if y_human_laser < 750 and y_human <= 900:
-            
-                    del human_x_positions[human_index]
-                    del human_y_positions[human_index]
+            if (x_human - human_width/2 <= x_human_laser <= x_human + human_width/2) and (y_human - human_height/2 <= y_human_laser <= y_human + human_height/2):
+                del human_x_positions[human_index]
+                del human_y_positions[human_index]
 
-                    del human_x_positions_laser[human_laser_index]
-                    del human_y_positions_laser[human_laser_index]
-                    
-                    human_hit = True 
-                    add_more_humans() 
-                    break
+                del human_x_positions_laser[human_laser_index]
+                del human_y_positions_laser[human_laser_index]
+                
+                human_hit = True 
+                human_points += 1
+                add_more_humans() 
+                break
 
-            else: human_laser_index +=1
+            else: 
+                human_laser_index += 1
 
         if human_hit == False: 
-            human_index +=1
+            human_index += 1
         else:
             break
 
@@ -368,7 +359,7 @@ def laser_human_collision():
 def laser_alien_collision():
     global alien_x_positions_laser, alien_y_positions_laser
     global x_alien_laser, y_alien_laser
-    global alien_width, alien_height, alien_hit
+    global alien_width, alien_height, alien_hit, alien_points
 
     alien_hit = False
     alien_index = 0
@@ -377,23 +368,24 @@ def laser_alien_collision():
         alien_laser_index = 0
 
         for x_alien_laser, y_alien_laser in zip(alien_x_positions_laser, alien_y_positions_laser):
-            if (x_alien - alien_width/2 <= x_alien_laser <= x_alien + alien_width/2 ) and (y_alien- alien_height/2 <= y_alien_laser <= y_alien + alien_height/2):
-                if y_human_laser < 750:
+            if (x_alien - alien_width/2 <= x_alien_laser <= x_alien + alien_width/2) and (y_alien- alien_height/2 <= y_alien_laser <= y_alien + alien_height/2):
             
-                    del alien_x_positions[alien_index]
-                    del alien_y_positions[alien_index]
+                del alien_x_positions[alien_index]
+                del alien_y_positions[alien_index]
 
-                    del alien_x_positions_laser[alien_laser_index]
-                    del alien_y_positions_laser[alien_laser_index]
-                    
-                    alien_hit = True                               
-                    add_more_aliens()
-                    break
+                del alien_x_positions_laser[alien_laser_index]
+                del alien_y_positions_laser[alien_laser_index]
+                
+                alien_hit = True   
+                alien_points += 1            
+                add_more_aliens()
+                break
             
-            else: alien_laser_index +=1
+            else: 
+                alien_laser_index += 1
 
         if alien_hit == False: 
-            alien_index +=1
+            alien_index += 1
         else:
             break
 
@@ -456,13 +448,13 @@ def on_key_press(key, modifiers):
 
     if key == arcade.key.W:
         fire_laser_alien = True     
-        alien_x_positions_laser.append (spaceship_alien_x)
-        alien_y_positions_laser.append (spaceship_alien_y)
+        alien_x_positions_laser.append(spaceship_alien_x)
+        alien_y_positions_laser.append(spaceship_alien_y)
     
     if key == arcade.key.UP:
         fire_laser_human = True     
-        human_x_positions_laser.append (spaceship_human_x)
-        human_y_positions_laser.append (spaceship_human_y)
+        human_x_positions_laser.append(spaceship_human_x)
+        human_y_positions_laser.append(spaceship_human_y)
 
     if key == arcade.key.SPACE:
         run_game = True
