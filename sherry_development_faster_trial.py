@@ -94,9 +94,6 @@ main_screen_meteor2_x = 1000
 main_screen_meteor1_degree = 0
 main_screen_meteor2_degree = 0
 
-alien_hit = False
-human_hit = False
-
 alien_points = 0
 human_points = 0
 
@@ -141,13 +138,23 @@ def update(delta_time):
 
     global human_hit, alien_hit
 
+    removed_human_lasers = 0
     for index in range(len(human_y_positions_laser)):
-        if human_y_positions_laser[index] < 765:
-            human_y_positions_laser[index] += 30
+        if human_y_positions_laser[index - removed_human_lasers] < 765:
+            human_y_positions_laser[index - removed_human_lasers] += 30
+        else:
+            del human_x_positions_laser[index - removed_human_lasers]
+            del human_y_positions_laser[index - removed_human_lasers]
+            removed_human_lasers += 1
 
+    removed_alien_lasers = 0
     for index in range(len(alien_y_positions_laser)):
-        if alien_y_positions_laser[index] < 765:
-            alien_y_positions_laser[index] += 30
+        if alien_y_positions_laser[index - removed_alien_lasers] < 765:
+            alien_y_positions_laser[index - removed_alien_lasers] += 30
+        else:
+            del alien_x_positions_laser[index - removed_alien_lasers]
+            del alien_y_positions_laser[index - removed_alien_lasers]
+            removed_alien_lasers += 1
             
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, spaceship_human_x, spaceship_alien_x
     
@@ -171,13 +178,6 @@ def update(delta_time):
         if spaceship_alien_x > 430:
             spaceship_alien_x = 430 
 
-    global human_hit, alien_hit, human_points, alien_points
-
-    if human_hit == True:
-        human_points += 1
-
-    if alien_hit == True:
-        alien_points += 1
 
 def draw_main_screen(x, y):
     global main_screen_alien_x, main_screen_alien_y, main_screen_human_x, main_screen_human_y, main_screen_meteor1_x, main_screen_meteor1_y, main_screen_meteor2_x, main_screen_meteor2_y, main_screen_meteor1_degree, main_screen_meteor2_degree
@@ -330,9 +330,8 @@ def add_more_aliens():
 def laser_human_collision():
     global human_x_positions_laser, human_y_positions_laser
     global x_human_laser, y_human_laser
-    global human_width, human_height, human_hit, human_points
+    global human_width, human_height, human_points
    
-    human_hit = False
     human_index = 0
     
     for x_human, y_human in zip(human_x_positions, human_y_positions):
@@ -346,18 +345,14 @@ def laser_human_collision():
                 del human_x_positions_laser[human_laser_index]
                 del human_y_positions_laser[human_laser_index]
                 
-                human_hit = True
                 add_more_humans()
                 human_points += 10
                 continue
 
             else: 
                 human_laser_index += 1
-                
-        if human_hit == False: 
-            human_index += 1
-        else:
-            continue
+
+        human_index += 1
 
 
 def laser_alien_collision():
@@ -365,7 +360,6 @@ def laser_alien_collision():
     global x_alien_laser, y_alien_laser
     global alien_width, alien_height, alien_points
 
-    alien_hit = False
     alien_index = 0
 
     for x_alien, y_alien in zip(alien_x_positions, alien_y_positions):
@@ -380,18 +374,13 @@ def laser_alien_collision():
                 del alien_x_positions_laser[alien_laser_index]
                 del alien_y_positions_laser[alien_laser_index]
                 
-                alien_hit = True
                 add_more_aliens()
                 alien_points += 10
                 continue
                 
             else: 
                 alien_laser_index += 1
-                
-        if alien_hit == False: 
-            alien_index += 1
-        else:
-            continue
+        alien_index += 1
 
 
 def on_draw():
@@ -406,7 +395,7 @@ def on_draw():
         laser_human_collision()
         laser_alien_collision()
         time = True
-        print(elapsed_time)
+        #print(elapsed_time)
 
         for x_human, y_human in zip(human_x_positions, human_y_positions):
             draw_human(x_human, y_human)
