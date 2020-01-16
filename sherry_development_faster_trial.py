@@ -244,7 +244,21 @@ def alien_points_counter():
 
 
 def human_points_counter():
-    arcade.draw_text("Points: " + str(human_points), 550, 600, arcade.color.WHITE, 15)
+    arcade.draw_text("Points: " + str(human_points), 880, 600, arcade.color.WHITE, 15)
+
+
+def alien_lives(x, y):
+    scale = 0.06
+    texture = arcade.load_texture("heart.png")
+    arcade.draw_texture_rectangle(x, y, scale * texture.width, 
+                                    scale * texture.height, texture, 0)
+
+
+def human_lives(x, y):
+    scale = 0.06
+    texture = arcade.load_texture("heart.png")
+    arcade.draw_texture_rectangle(x, y, scale * texture.width, 
+                                    scale * texture.height, texture, 0)
 
 
 def draw_human(x, y):
@@ -422,6 +436,14 @@ def on_draw():
 
         alien_points_counter()
         human_points_counter()
+
+        alien_lives(62, 580)
+        alien_lives(87, 580)
+        alien_lives(112, 580)
+
+        alien_lives(890, 580)
+        alien_lives(915, 580)
+        alien_lives(940, 580)
     
 
 def on_key_press(key, modifiers):
