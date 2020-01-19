@@ -173,7 +173,7 @@ def update(delta_time):
                 alien_x_positions_shooting_star[index] = random.randrange(75, WIDTH/2 - 75) 
     
     if elapsed_time == 20.00 or elapsed_time == 40.00:
-        game_speed += 0.5
+        game_speed += 0.8
     elif elapsed_time > 60:
         game_speed = 4.5
 
@@ -228,7 +228,7 @@ def draw_main_screen(x, y):
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
                                     scale * texture.height, texture, 0)
     
-    arcade.draw_text("Welcome to...", 385, 600, arcade.color.BLACK, 25)
+    arcade.draw_text("Welcome to...", 385, 600, arcade.color.BLACK, 25, font_name= 'TIMES NEW ROMAN')
     arcade.draw_text("ASTRONAUTS VS ALIENS!", 30, 375, arcade.color.BLACK, 65)
     arcade.draw_text("press space to start", 350, 130, arcade.color.BLACK, 25)
 
@@ -281,7 +281,7 @@ def draw_end_screen(x, y):
     arcade.draw_texture_rectangle(x, y, scale * texture.width, 
                                     scale * texture.height, texture, 0)
     
-    arcade.draw_text("GAME OVER!", 270, 500, arcade.color.BLACK, 65)
+    arcade.draw_text("GAME OVER!", 270, 500, arcade.color.BLACK, 65, font_name= 'GARA')
     arcade.draw_text("press space to restart", 350, 75, arcade.color.BLACK, 25)
 
     if alien_points > human_points:
@@ -484,7 +484,6 @@ def on_draw():
         laser_human_collision()
         laser_alien_collision()
         time = True
-        print(elapsed_time)
 
         for x_human, y_human in zip(human_x_positions, human_y_positions):
             draw_human(x_human, y_human)
@@ -516,13 +515,22 @@ def on_draw():
             
             for x_alien_shooting_star, y_alien_shooting_star in zip(alien_x_positions_shooting_star, alien_y_positions_shooting_star):
                 draw_alien_shooting_star(x_alien_shooting_star, y_alien_shooting_star)
-        
         elif 19 < elapsed_time < 21 or 39 < elapsed_time < 41 or 59 < elapsed_time < 61:
             arcade.draw_rectangle_filled(500, 375, 370, 100, arcade.color.BLACK)
             arcade.draw_text("LEVEL UP!", 320, 342, arcade.color.WHITE, 65)
+        
+        if 116 <= elapsed_time <= 119:
+            arcade.draw_rectangle_filled(500, 375, 50, 100, arcade.color.BLACK)
+            arcade.draw_text(str(int(120 - elapsed_time)), 475, 342, arcade.color.WHITE, 65)
+        elif elapsed_time >= 120:
+            arcade.draw_rectangle_filled(500, 375, 390, 100, arcade.color.BLACK)
+            arcade.draw_text("TIME'S UP!", 320, 342, arcade.color.WHITE, 65)
 
         alien_points_counter()
         human_points_counter()
+
+        alien_points = 0
+        human_points = 0
 
         alien_lives(62, 580)
         alien_lives(87, 580)
@@ -532,11 +540,11 @@ def on_draw():
         alien_lives(915, 580)
         alien_lives(940, 580)
     
-    if elapsed_time > 5:
+    if elapsed_time > 121:
         run_game = False
         draw_end_screen(500, 375)
 
-
+    
 def on_key_press(key, modifiers):
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, fire_laser_human, fire_laser_alien, spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, run_game, time, delta_time
 
@@ -564,8 +572,8 @@ def on_key_press(key, modifiers):
 
     if key == arcade.key.SPACE:
         run_game = True
-        time = False
         delta_time = True
+        draw_end_screen(- 300, - 300)
 
 
 def on_key_release(key, modifiers):
