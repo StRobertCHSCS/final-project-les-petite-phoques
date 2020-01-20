@@ -91,6 +91,10 @@ meteor_height = 60
 meteor_width = 60
 alien_meteor_width = 60
 alien_meteor_height = 60
+spaceship_width = 145
+spaceship_height = 50
+alien_spaceship_width = 145
+alien_spaceship_height = 50
 
 x_human_laser = 0
 y_human_laser = 0
@@ -415,6 +419,20 @@ def add_more_aliens():
     alien_x_positions.append(x_alien)
     alien_y_positions.append(y_alien)
 
+def add_more_meteors():
+    x_meteor = random.randrange(WIDTH/2 + 75, WIDTH - 75)
+    y_meteor = random.randrange(HEIGHT, HEIGHT*2)
+
+    meteor_x_positions.append(x_meteor)
+    meteor_y_positions.append(y_meteor)
+
+def add_more_alien_meteors():
+    x_alien_meteor = random.randrange(75, WIDTH/2 - 75)
+    y_alien_meteor = random.randrange(HEIGHT, HEIGHT*2)
+
+    alien_meteor_x_positions.append(x_meteor)
+    alien_meteor_y_positions.append(y_meteor)
+
 
 def laser_human_collision():
     global human_x_positions_laser, human_y_positions_laser
@@ -471,6 +489,49 @@ def laser_alien_collision():
                 alien_laser_index += 1
         alien_index += 1
 
+def meteor_spaceship_collision():
+    global spaceship_human_x, spaceship_human_y
+    global meteor_x_positions, meteor_y_positions
+    global spaceship_width, spaceship_height
+
+    spaceship_hit = False
+    meteor_index = 0
+
+    for x_meteor, y_meteor in zip(meteor_x_positions, meteor_y_positions):
+
+        if (x_meteor - spaceship_width/2 <= spaceship_human_x <= x_meteor + spaceship_width/2 ) and (y_meteor - spaceship_height/2 <= spaceship_human_y <= y_meteor + spaceship_height/2 ):
+
+            del meteor_x_positions[meteor_index]
+            del meteor_y_positions[meteor_index]
+
+            spaceship_hit = True
+            add_more_meteors()
+            break
+
+        else:
+            meteor_index += 1
+ 
+def alien_meteor_spaceship_collision():
+    global spaceship_alien_x, spaceship_alien_y
+    global alien_meteor_x_positions, alien_meteor_y_positions
+    global spaceship_width, spaceship_height
+
+    alien_spaceship_hit = False
+    alien_meteor_index = 0
+
+    for x_alien_meteor, y_alien_meteor in zip(alien_meteor_x_positions, alien_meteor_y_positions):
+
+        if (x_alien_meteor - alien_spaceship_width/2 <= spaceship_alien_x <= x_alien_meteor + alien_spaceship_width/2 ) and (y_alien_meteor - alien_spaceship_height/2 <= spaceship_alien_y <= y_alien_meteor + alien_spaceship_height/2 ):
+
+            del alien_meteor_x_positions[alien_meteor_index]
+            del alien_meteor_y_positions[alien_meteor_index]
+
+            alien_spaceship_hit = True
+            add_more_alien_meteors()
+            break
+
+        else:
+            alien_meteor_index += 1
 
 def on_draw():
     global spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, run_game, time, elapsed_time, draw_enemy_rate, draw_meteor_rate
@@ -483,6 +544,8 @@ def on_draw():
         draw_background(500, 375)
         laser_human_collision()
         laser_alien_collision()
+        meteor_spaceship_collision()
+        alien_meteor_spaceship_collision()
         time = True
 
         for x_human, y_human in zip(human_x_positions, human_y_positions):
