@@ -509,7 +509,7 @@ def on_draw():
         arcade.draw_lrtb_rectangle_filled(WIDTH/2 - 5, WIDTH/2 + 5, HEIGHT, 0, arcade.color.WHITE)
 
         # if elapsed_time > 30.00:
-        if elapsed_time > 60:
+        if elapsed_time > 60:        
             for x_human_shooting_star, y_human_shooting_star in zip(human_x_positions_shooting_star, human_y_positions_shooting_star):
                 draw_human_shooting_star(x_human_shooting_star, y_human_shooting_star)
             
