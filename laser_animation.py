@@ -34,6 +34,8 @@ draw_shooting_star_rate = 1
 game_speed = 3
 
 star_life = 3
+times_hit = 0
+alien_times_hit = 0
 
 elapsed_time = 0
 time = False
@@ -292,7 +294,7 @@ def draw_end_screen(x, y):
                                     scale * texture.height, texture, 0)
     
     arcade.draw_text("GAME OVER!", 270, 500, arcade.color.BLACK, 65, font_name= 'GARA')
-    arcade.draw_text("press space to restart", 350, 75, arcade.color.BLACK, 25)
+    arcade.draw_text("press enter to restart", 350, 75, arcade.color.BLACK, 25)
 
     if alien_points > human_points:
         arcade.draw_text("The Humans Have Won Control!", 175, 400, arcade.color.BLACK, 40)
@@ -569,9 +571,11 @@ def meteor_spaceship_collision():
     global spaceship_human_x, spaceship_human_y
     global meteor_x_positions, meteor_y_positions
     global spaceship_width, spaceship_height
+    global times_hit
 
     spaceship_hit = False
     meteor_index = 0
+
 
     for x_meteor, y_meteor in zip(meteor_x_positions, meteor_y_positions):
 
@@ -581,6 +585,7 @@ def meteor_spaceship_collision():
             del meteor_y_positions[meteor_index]
 
             spaceship_hit = True
+            times_hit +=1
             add_more_meteors()
             break
 
@@ -591,6 +596,7 @@ def alien_meteor_spaceship_collision():
     global spaceship_alien_x, spaceship_alien_y
     global alien_meteor_x_positions, alien_meteor_y_positions
     global spaceship_width, spaceship_height
+    global alien_times_hit
 
     alien_spaceship_hit = False
     alien_meteor_index = 0
@@ -603,7 +609,8 @@ def alien_meteor_spaceship_collision():
             del alien_meteor_y_positions[alien_meteor_index]
 
             alien_spaceship_hit = True
-            add_more_alien_meteors()
+            alien_times_hit += 1
+            add_more_alien_meteors() 
             break
 
         else:
@@ -611,7 +618,8 @@ def alien_meteor_spaceship_collision():
 
 def on_draw():
     global spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, run_game, time, elapsed_time, draw_enemy_rate, draw_meteor_rate
-    
+    global times_hit
+
     arcade.start_render()
     
     draw_main_screen(500, 375)
@@ -673,19 +681,36 @@ def on_draw():
         alien_points = 0
         human_points = 0
 
-        alien_lives(62, 580)
-        alien_lives(87, 580)
-        alien_lives(112, 580)
-
-        alien_lives(890, 580)
-        alien_lives(915, 580)
-        alien_lives(940, 580)
+ 
     
     if elapsed_time > 121:
         run_game = False
         draw_end_screen(500, 375)
 
+    if times_hit == 0:
+        alien_lives(890, 580)
+        alien_lives(915, 580)
+        alien_lives(940, 580)
+    if times_hit == 1:
+        alien_lives(915, 580)
+        alien_lives(940, 580)
+
+    if times_hit == 2:
+        alien_lives(940, 580)
+
+    if alien_times_hit == 0:
+        alien_lives(62, 580)
+        alien_lives(87, 580)
+        alien_lives(112, 580)
+
+    if alien_times_hit == 1:
+        alien_lives(87, 580)
+        alien_lives(112, 580)
     
+    if alien_times_hit == 2:
+        alien_lives(112, 580)    
+
+
 def on_key_press(key, modifiers):
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, fire_laser_human, fire_laser_alien, spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, run_game, time, delta_time
 
@@ -716,6 +741,11 @@ def on_key_press(key, modifiers):
         delta_time = True
         draw_end_screen(- 300, - 300)
 
+    if key == arcade.key.ENTER:
+        run_game = True
+        delta_time = True 
+        draw_main_screen(-300, -300)
+     
 
 def on_key_release(key, modifiers):
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, laser_fire_key
