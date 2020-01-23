@@ -681,34 +681,35 @@ def on_draw():
         alien_points = 0
         human_points = 0
 
- 
+        if times_hit == 0:
+            alien_lives(890, 580)
+            alien_lives(915, 580)
+            alien_lives(940, 580)
+        if times_hit == 1:
+            alien_lives(915, 580)
+            alien_lives(940, 580)
+
+        if times_hit == 2:
+            alien_lives(940, 580)
+
+        if alien_times_hit == 0:
+            alien_lives(62, 580)
+            alien_lives(87, 580)
+            alien_lives(112, 580)
+
+        if alien_times_hit == 1:
+            alien_lives(87, 580)
+            alien_lives(112, 580)
+    
+        if alien_times_hit == 2:
+            alien_lives(112, 580)  
+
     
     if elapsed_time > 121:
         run_game = False
         draw_end_screen(500, 375)
 
-    if times_hit == 0:
-        alien_lives(890, 580)
-        alien_lives(915, 580)
-        alien_lives(940, 580)
-    if times_hit == 1:
-        alien_lives(915, 580)
-        alien_lives(940, 580)
-
-    if times_hit == 2:
-        alien_lives(940, 580)
-
-    if alien_times_hit == 0:
-        alien_lives(62, 580)
-        alien_lives(87, 580)
-        alien_lives(112, 580)
-
-    if alien_times_hit == 1:
-        alien_lives(87, 580)
-        alien_lives(112, 580)
-    
-    if alien_times_hit == 2:
-        alien_lives(112, 580)    
+      
 
 
 def on_key_press(key, modifiers):

@@ -91,15 +91,9 @@ meteor_height = 60
 meteor_width = 60
 alien_meteor_width = 60
 alien_meteor_height = 60
-<<<<<<< HEAD
-spaceship_width = 200
-spaceship_height = 50
-alien_spaceship_width = 200
-=======
 spaceship_width = 150
 spaceship_height = 50
 alien_spaceship_width = 150
->>>>>>> b9a753243be5de6d6a960e279f23c0e8f8bf8b48
 alien_spaceship_height = 50
 
 x_human_laser = 0
@@ -572,18 +566,11 @@ def meteor_spaceship_collision():
 
             spaceship_hit = True
             add_more_meteors()
-<<<<<<< HEAD
-            break
-
-        else:
-            meteor_index += 1
-=======
             human_meteor_hit_counter += 1
             continue
         
     meteor_index += 1
  
->>>>>>> b9a753243be5de6d6a960e279f23c0e8f8bf8b48
 
 def alien_meteor_spaceship_collision():
     global spaceship_alien_x, spaceship_alien_y
