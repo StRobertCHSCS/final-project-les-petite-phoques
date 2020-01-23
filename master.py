@@ -91,9 +91,9 @@ meteor_height = 60
 meteor_width = 60
 alien_meteor_width = 60
 alien_meteor_height = 60
-spaceship_width = 145
+spaceship_width = 200
 spaceship_height = 50
-alien_spaceship_width = 145
+alien_spaceship_width = 200
 alien_spaceship_height = 50
 
 x_human_laser = 0
@@ -499,7 +499,7 @@ def meteor_spaceship_collision():
 
     for x_meteor, y_meteor in zip(meteor_x_positions, meteor_y_positions):
 
-        if (x_meteor - spaceship_width/2 <= spaceship_human_x <= x_meteor + spaceship_width/2 ) and (y_meteor - spaceship_height/2 <= spaceship_human_y <= y_meteor + spaceship_height/2 ):
+        if (x_meteor - spaceship_width/2 <= spaceship_human_x <= x_meteor + spaceship_width/2) and (y_meteor - spaceship_height/2 <= spaceship_human_y <= y_meteor + spaceship_height/2):
 
             del meteor_x_positions[meteor_index]
             del meteor_y_positions[meteor_index]
@@ -510,7 +510,7 @@ def meteor_spaceship_collision():
 
         else:
             meteor_index += 1
- 
+
 def alien_meteor_spaceship_collision():
     global spaceship_alien_x, spaceship_alien_y
     global alien_meteor_x_positions, alien_meteor_y_positions
