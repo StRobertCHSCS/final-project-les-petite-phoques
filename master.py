@@ -181,7 +181,7 @@ def update(delta_time):
     if elapsed_time == 20.00 or elapsed_time == 40.00:
         game_speed += 0.8
     elif elapsed_time > 60:
-        game_speed = 4.5
+        game_speed = 4.9
 
     global human_hit, alien_hit
 
