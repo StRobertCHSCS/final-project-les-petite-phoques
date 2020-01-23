@@ -187,7 +187,7 @@ def update(delta_time):
     if elapsed_time == 20.00 or elapsed_time == 40.00:
         game_speed += 0.8
     elif elapsed_time > 60:
-        game_speed = 4.5
+        game_speed = 4.9
 
     global human_hit, alien_hit
 
@@ -656,9 +656,11 @@ def on_draw():
             
             for x_alien_shooting_star, y_alien_shooting_star in zip(alien_x_positions_shooting_star, alien_y_positions_shooting_star):
                 draw_alien_shooting_star(x_alien_shooting_star, y_alien_shooting_star)
-        elif 5 < elapsed_time < 7 or 39 < elapsed_time < 41 or 59 < elapsed_time < 61:
+        elif 19 < elapsed_time < 21 or 39 < elapsed_time < 41 or 59 < elapsed_time < 61:
             arcade.draw_rectangle_filled(500, 375, 370, 100, arcade.color.BLACK)
             arcade.draw_text("LEVEL UP!", 320, 342, arcade.color.WHITE, 65, font_name=('calibri'))
+        
+        if 18.95 < elapsed_time < 19 or 38.95 < elapsed_time < 39 or 58.95 < elapsed_time < 59:
             arcade.sound.play_sound(level_up_sound)
         
         if 116 <= elapsed_time <= 119:
