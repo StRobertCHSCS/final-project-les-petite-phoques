@@ -33,6 +33,9 @@ draw_meteor_rate = 2
 draw_shooting_star_rate = 1
 game_speed = 3
 
+times_hit = 0
+alien_times_hit = 0
+
 elapsed_time = 0
 time = False
 
@@ -559,6 +562,7 @@ def meteor_spaceship_collision():
     global spaceship_human_x, spaceship_human_y
     global meteor_x_positions, meteor_y_positions
     global spaceship_width, spaceship_height, human_meteor_hit_counter
+    global times_hit
 
     spaceship_hit = False
     meteor_index = 0
@@ -571,6 +575,7 @@ def meteor_spaceship_collision():
             del meteor_y_positions[meteor_index]
 
             spaceship_hit = True
+            times_hit += 1
             add_more_meteors()
 <<<<<<< HEAD
             break
@@ -589,6 +594,7 @@ def alien_meteor_spaceship_collision():
     global spaceship_alien_x, spaceship_alien_y
     global alien_meteor_x_positions, alien_meteor_y_positions
     global spaceship_width, spaceship_height, alien_meteor_hit_counter
+    global alien_times_hit
 
     alien_spaceship_hit = False
     alien_meteor_index = 0
@@ -602,6 +608,7 @@ def alien_meteor_spaceship_collision():
 
             alien_spaceship_hit = True
             add_more_alien_meteors()
+            alien_times_hit += 1
             alien_meteor_hit_counter += 1
             continue
         
@@ -688,6 +695,29 @@ def on_draw():
         run_game = False
         draw_end_screen(500, 375)
 
+    if times_hit == 0:
+        alien_lives(890, 580)
+        alien_lives(915, 580)
+        alien_lives(940, 580)
+    if times_hit == 1:
+        alien_lives(915, 580)
+        alien_lives(940, 580)
+
+    if times_hit == 2:
+        alien_lives(940, 580)
+
+    if alien_times_hit == 0:
+        alien_lives(62, 580)
+        alien_lives(87, 580)
+        alien_lives(112, 580)
+
+    if alien_times_hit == 1:
+        alien_lives(87, 580)
+        alien_lives(112, 580)
+    
+    if alien_times_hit == 2:
+        alien_lives(112, 580) 
+        
     
 def on_key_press(key, modifiers):
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, fire_laser_human, fire_laser_alien, spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, run_game, time, delta_time
