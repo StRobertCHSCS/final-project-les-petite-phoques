@@ -38,6 +38,7 @@ alien_times_hit = 0
 
 elapsed_time = 0
 run_game = False
+start_game = True
 
 if 19.00 < elapsed_time < 21.00 or 39.00 < elapsed_time < 41.00:
     draw_enemy_rate += 1
@@ -99,10 +100,10 @@ spaceship_width = 130
 spaceship_height = 50
 alien_spaceship_width = 130
 alien_spaceship_height = 50
-human_shooting_star_width = 210
-human_shooting_star_height = 156
-alien_shooting_star_width = 210
-alien_shooting_star_height = 156
+human_shooting_star_width = 35
+human_shooting_star_height = 26
+alien_shooting_star_width = 35
+alien_shooting_star_height = 26
 
 x_human_laser = 0
 y_human_laser = 0
@@ -307,13 +308,17 @@ def draw_end_screen(x, y):
                                   scale * texture.height, texture, 0)
 
     arcade.draw_text("GAME OVER!", 270, 500,
-                     arcade.color.BLACK, 65, font_name='GARA')
+                     arcade.color.BLACK, 65)
     arcade.draw_text("press space to restart", 350, 75, arcade.color.BLACK, 25)
 
-    if alien_times_hit >= 3 or alien_points > human_points:
+    if human_times_hit >= 3:
         arcade.draw_text("The Humans Have Won Control!", 175, 400, arcade.color.BLACK, 40)
-    elif  human_times_hit >= 3 or human_points > alien_points:
+    elif alien_times_hit >= 3:
         arcade.draw_text("The Aliens Have Won Control!", 200, 400, arcade.color.BLACK, 40)
+    elif alien_points > human_points:
+        arcade.draw_text("The Humans Have Won Control!", 200, 400, arcade.color.BLACK, 40)
+    elif human_points > alien_points:
+        arcade.draw_text("The Aliens Have Won Control!", 175, 400, arcade.color.BLACK, 40)
     else:
         arcade.draw_text("It's a tie! Peace has been achieved.", 150, 400, arcade.color.BLACK, 40)
         arcade.draw_text("For now...", 800, 350, arcade.color.BLACK, 25)
@@ -393,14 +398,14 @@ def draw_alien_meteor(x, y):
 
 
 def draw_human_shooting_star(x, y):
-    scale = 0.1
+    scale = 0.06
     texture = arcade.load_texture("shooting star.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
                                   scale * texture.height, texture, - 20)
 
 
 def draw_alien_shooting_star(x, y):
-    scale = 0.1
+    scale = 0.06
     texture = arcade.load_texture("shooting star.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
                                   scale * texture.height, texture, - 20)
@@ -418,6 +423,27 @@ def draw_spaceship_alien(x, y):
     texture = arcade.load_texture("spaceship.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
                                   scale * texture.height, texture, 0)
+
+
+# def draw_final_human(x, y):
+#     scale = 0.3
+#     texture = arcade.load_texture("astronaut.png")
+#     arcade.draw_texture_rectangle(x, y, scale * texture.width,
+#                                   scale * texture.height, texture, 0)
+
+
+# def draw_final_alien(x, y):
+#     scale = 0.3
+#     texture = arcade.load_texture("alien.png")
+#     arcade.draw_texture_rectangle(x, y, scale * texture.width,
+#                                   scale * texture.height, texture, 0)
+
+
+def pause_screen():
+    scale = 0.5
+    texture = arcade.load_texture("pause_screen.jpg")
+    arcade.draw_texture_rectangle(500, 350, scale * texture.width,
+                                scale * texture.height, texture, 0)
 
 
 def add_more_humans():
@@ -463,6 +489,7 @@ def add_more_alien_meteors():
     alien_meteor_x_positions.append(x_alien_meteor)
     alien_meteor_y_positions.append(y_alien_meteor)
 
+
 def add_more_human_shooting_stars():
     x_human_shooting_star = random.randrange(WIDTH/2 + 75, WIDTH - 75)
     y_human_shooting_star = random.randrange(HEIGHT, HEIGHT + 50)
@@ -471,6 +498,7 @@ def add_more_human_shooting_stars():
     human_x_positions_shooting_star.append(x_human_shooting_star)
     human_y_positions_shooting_star.append(y_human_shooting_star)
 
+
 def add_more_alien_shooting_stars():
     x_alien_shooting_star = random.randrange(75, WIDTH/2 - 75)
     y_alien_shooting_star = random.randrange(HEIGHT, HEIGHT + 50)
@@ -478,6 +506,7 @@ def add_more_alien_shooting_stars():
     # append the x and y values to the appropriate list
     alien_x_positions_shooting_star.append(x_alien_shooting_star)
     alien_y_positions_shooting_star.append(y_alien_shooting_star)
+
 
 def laser_human_collision():
     global human_x_positions_laser, human_y_positions_laser
@@ -643,17 +672,27 @@ def on_draw():
 
     arcade.start_render()
 
-    draw_main_screen(500, 375)
-
+    if start_game == True:
+        draw_main_screen(500, 375)
+    
     if run_game == True:
         draw_background(500, 375)
+        
+        arcade.draw_lrtb_rectangle_filled(WIDTH/2 - 5, WIDTH/2 + 5, HEIGHT, 0, arcade.color.WHITE)
+        
+        arcade.draw_text("HUMAN SPACESHIP", 145, 700, arcade.color.WHITE, 20)
+        arcade.draw_text("ALIEN SPACESHIP", 665, 700, arcade.color.WHITE, 20)
+        arcade.draw_rectangle_filled(500, 700, 200, 40, arcade.color.BLACK)
+        arcade.draw_text("press esc to pause", 450, 700, arcade.color.WHITE, 15)
+        # draw_final_human(750, 375)
+        # draw_final_alien(250, 375)
+        
         laser_human_collision()
         laser_alien_collision()
         meteor_spaceship_collision()
         alien_meteor_spaceship_collision()
         laser_human_shooting_star_collision()
         laser_alien_shooting_star_collision()
-        time = True
 
         for x_human, y_human in zip(human_x_positions, human_y_positions):
             draw_human(x_human, y_human)
@@ -675,9 +714,6 @@ def on_draw():
 
         for x_alien_laser, y_alien_laser in zip(alien_x_positions_laser, alien_y_positions_laser):
             draw_alien_laser(x_alien_laser, y_alien_laser)
-
-        arcade.draw_lrtb_rectangle_filled(
-            WIDTH/2 - 5, WIDTH/2 + 5, HEIGHT, 0, arcade.color.WHITE)
 
         level_up_sound = arcade.load_sound("level_up.wav")
         lost_life_sound = arcade.load_sound("lost_life.wav")
@@ -719,8 +755,7 @@ def on_draw():
             alien_lives(940, 580)
 
         elif human_times_hit == 2:
-            alien_lives(940, 580)
-            # arcade.sound.play_sound(lost_life_sound)
+            alien_lives(90, 580)
 
         if alien_times_hit == 0:
             alien_lives(62, 580)
@@ -730,11 +765,12 @@ def on_draw():
         elif alien_times_hit == 1:
             alien_lives(87, 580)
             alien_lives(112, 580)
-            # arcade.sound.play_sound(lost_life_sound)
 
         elif alien_times_hit == 2:
             alien_lives(112, 580)
-            # arcade.sound.play_sound(lost_life_sound)
+    
+    elif run_game == False and start_game == False:
+        pause_screen()
 
 
     if human_times_hit >= 3:
@@ -744,14 +780,13 @@ def on_draw():
     if alien_times_hit >= 3:
         run_game = False
         draw_end_screen(500, 375)
-
     elif elapsed_time > 121:
         run_game = False
         draw_end_screen(500, 375)
 
 
 def on_key_press(key, modifiers):
-    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, fire_laser_human, fire_laser_alien, spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, run_game, time, delta_time
+    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, fire_laser_human, fire_laser_alien, spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, run_game, time, delta_time, start_game
 
     laser_sound = arcade.load_sound("laser.wav")
 
@@ -781,9 +816,12 @@ def on_key_press(key, modifiers):
 
     if key == arcade.key.SPACE:
         run_game = True
-        time = True 
 
-
+    if key == arcade.key.ESCAPE:
+        run_game = False
+        start_game = False
+        
+        
 def on_key_release(key, modifiers):
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, laser_fire_key
 
@@ -804,7 +842,7 @@ def on_key_release(key, modifiers):
 
     if key == arcade.key.UP:
         laser_fire_key = False
-
+    
 
 def setup():
     arcade.open_window(1000, 750, "Astronauts VS Aliens!")

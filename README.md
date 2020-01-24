@@ -32,4 +32,7 @@ The goal of the game is to **score the most points**, or to **survive longer tha
 * The key must be pressed repeatedly to result in bullets being shot -- it cannot be held in place, as only one bullet will come out.
 * To start the game, one player must press the space key at the beginning. 
 
+## Screen Mock-Ups
+![](screen_mock-ups.png)
+
 # Good luck everyone, and Have Fun!
