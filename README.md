@@ -18,17 +18,18 @@ Left and Right are to move left and right, and the Up key is for shooting lasers
 
 You earn points by hitting various objects that fly in your way, whether that be enemies from the other side, or other special objects.
 
-The goal of the game is to **score the most points**. Whoever does this wins, and gets full rights to Planet Phoque for their species!
+The goal of the game is to **score the most points**, or to **survive longer than the other player**. Whoever does this wins, and gets full rights to Planet Phoque for their species!
 
 ## Scoring 
-* All aliens/humans hit: **+ 5 points** each.
-* Hitting a rare shooting star: **+ 15 points**, and can give you a temporary speed boost!
-* Ouch! Hitting a meteror: **- 10 points** from your score.
+* All aliens/humans hit: **+ 10 points** each.
+* Hitting a rare shooting star: **+ 15 points**, and can give you back a life!
+* Ouch! If a meteor hits your spaceship: **you lose one life (one of your hearts)!**.
+* If you lose all three of your hearts, you'll have to 
 * Near the end of the game, a giant face of the enemy side will appear on your side of the screen. This is the final stage that makes or breaks a close game, and you can earn **+ 10 points** every single time you shoot this face. Spam those bullets!
 
 ## Functionality and Limitations
 * Each character's spaceship is restricted to their side of the screen: the human spaceship on the left side, and the alien spaceship on the right. Neither can pass the black barrier in the middle of the screen.
 * The key must be pressed repeatedly to result in bullets being shot -- it cannot be held in place, as only one bullet will come out.
-* To start the game, one player must press a key at the beginning. 
+* To start the game, one player must press the space key at the beginning. 
 
 # Good luck everyone, and Have Fun!
