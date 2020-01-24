@@ -33,7 +33,7 @@ draw_meteor_rate = 2
 draw_shooting_star_rate = 1
 game_speed = 3
 
-times_hit = 0
+human_times_hit = 0
 alien_times_hit = 0
 
 elapsed_time = 0
@@ -99,6 +99,10 @@ spaceship_width = 130
 spaceship_height = 50
 alien_spaceship_width = 130
 alien_spaceship_height = 50
+human_shooting_star_width = 210
+human_shooting_star_height = 156
+alien_shooting_star_width = 210
+alien_shooting_star_height = 156
 
 x_human_laser = 0
 y_human_laser = 0
@@ -310,7 +314,7 @@ def draw_end_screen(x, y):
 
     if alien_points > human_points or alien_times_hit == 3:
         arcade.draw_text("The Humans Have Won Control!", 175, 400, arcade.color.BLACK, 40)
-    elif human_points > alien_points or times_hit == 3:
+    elif human_points > alien_points or human_times_hit == 3:
         arcade.draw_text("The Aliens Have Won Control!", 200, 400, arcade.color.BLACK, 40)
     else:
         arcade.draw_text("It's a tie! Peace has been achieved.", 150, 400, arcade.color.BLACK, 40)
@@ -461,6 +465,21 @@ def add_more_alien_meteors():
     alien_meteor_x_positions.append(x_alien_meteor)
     alien_meteor_y_positions.append(y_alien_meteor)
 
+def add_more_human_shooting_stars():
+    x_human_shooting_star = random.randrange(WIDTH/2 + 75, WIDTH - 75)
+    y_human_shooting_star = random.randrange(HEIGHT, HEIGHT + 50)
+    
+    # append the x and y values to the appropriate list
+    human_x_positions_shooting_star.append(x_human_shooting_star)
+    human_y_positions_shooting_star.append(y_human_shooting_star)
+
+def add_more_alien_shooting_stars():
+    x_alien_shooting_star = random.randrange(75, WIDTH/2 - 75)
+    y_alien_shooting_star = random.randrange(HEIGHT, HEIGHT + 50)
+    
+    # append the x and y values to the appropriate list
+    alien_x_positions_shooting_star.append(x_alien_shooting_star)
+    alien_y_positions_shooting_star.append(y_alien_shooting_star)
 
 def laser_human_collision():
     global human_x_positions_laser, human_y_positions_laser
@@ -521,7 +540,7 @@ def meteor_spaceship_collision():
     global spaceship_human_x, spaceship_human_y
     global meteor_x_positions, meteor_y_positions
     global spaceship_width, spaceship_height
-    global times_hit
+    global human_times_hit
 
     spaceship_hit = False
     meteor_index = 0
@@ -535,7 +554,7 @@ def meteor_spaceship_collision():
             del meteor_y_positions[meteor_index]
 
             spaceship_hit = True
-            times_hit += 1
+            human_times_hit += 1
             add_more_meteors()
             break
         
@@ -566,6 +585,60 @@ def alien_meteor_spaceship_collision():
         else:
             alien_meteor_index += 1
 
+def laser_human_shooting_star_collision():
+    global human_x_positions_laser, human_y_positions_laser
+    global x_human_laser, y_human_laser
+    global human_shooting_star_width, human_shooting_star_height
+
+
+    human_shooting_star_index = 0
+
+    for x_human_shooting_star, y_human_shooting_star in zip(human_x_positions_shooting_star, human_y_positions_shooting_star):
+        human_laser_index = 0 
+
+        for x_human_laser, y_human_laser in zip(human_x_positions_laser, human_y_positions_laser):
+            if (x_human_shooting_star - human_shooting_star_width/2 <= x_human_laser <= x_human_shooting_star + human_shooting_star_width/2) and (y_human_shooting_star - human_shooting_star_height/2 <= y_human_laser <= y_human_shooting_star + human_shooting_star_height/2):
+                del human_x_positions_shooting_star[human_shooting_star_index]
+                del human_y_positions_shooting_star[human_shooting_star_index]
+
+                del human_x_positions_laser[human_laser_index]
+                del human_y_positions_laser[human_laser_index]    
+               
+                add_more_human_shooting_stars()
+                break
+
+            else: 
+                human_laser_index += 1
+
+        human_shooting_star_index += 1    
+
+
+def laser_alien_shooting_star_collision():
+    global alien_x_positions_laser, alien_y_positions_laser
+    global x_alien_laser, y_alien_laser
+    global alien_shooting_star_width, alien_shooting_star_height
+
+    alien_shooting_star_index = 0
+
+    for x_alien_shooting_star, y_alien_shooting_star in zip(alien_x_positions_shooting_star, alien_y_positions_shooting_star):
+        alien_laser_index = 0
+
+        for x_alien_laser, y_alien_laser in zip(alien_x_positions_laser, alien_y_positions_laser):
+            if (x_alien_shooting_star - alien_shooting_star_width/2 <= x_alien_laser <= x_alien_shooting_star + alien_shooting_star_width/2) and (y_alien_shooting_star - alien_shooting_star_height/2 <= y_alien_laser <= y_alien_shooting_star + alien_shooting_star_height/2):
+                del alien_x_positions_shooting_star[alien_shooting_star_index]
+                del alien_y_positions_shooting_star[alien_shooting_star_index]
+
+                del alien_x_positions_laser[alien_laser_index]
+                del alien_y_positions_laser[alien_laser_index]
+
+                add_more_alien_shooting_stars()
+                break
+
+            else:
+                alien_laser_index += 1
+        
+        alien_shooting_star_index += 1
+
 
 def on_draw():
     global spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, run_game, time, elapsed_time, draw_enemy_rate, draw_meteor_rate
@@ -580,6 +653,8 @@ def on_draw():
         laser_alien_collision()
         meteor_spaceship_collision()
         alien_meteor_spaceship_collision()
+        laser_human_shooting_star_collision()
+        laser_alien_shooting_star_collision()
         time = True
 
         for x_human, y_human in zip(human_x_positions, human_y_positions):
@@ -636,17 +711,17 @@ def on_draw():
         alien_points = 0
         human_points = 0
 
-        if times_hit == 0:
+        if human_times_hit == 0:
             alien_lives(890, 580)
             alien_lives(915, 580)
             alien_lives(940, 580)
 
-        elif times_hit == 1:
+        elif human_times_hit == 1:
             alien_lives(915, 580)
             alien_lives(940, 580)
             # arcade.sound.play_sound(lost_life_sound)
 
-        elif times_hit == 2:
+        elif human_times_hit == 2:
             alien_lives(940, 580)
             # arcade.sound.play_sound(lost_life_sound)
 
@@ -664,7 +739,7 @@ def on_draw():
             alien_lives(112, 580)
             # arcade.sound.play_sound(lost_life_sound)
 
-    if times_hit >= 4:
+    if human_times_hit >= 4:
         run_game = False
         draw_end_screen(500, 375)
 
