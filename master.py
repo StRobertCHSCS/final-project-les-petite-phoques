@@ -538,7 +538,7 @@ def meteor_spaceship_collision():
             times_hit += 1
             add_more_meteors()
             break
-
+        
         else:
             meteor_index += 1
 
