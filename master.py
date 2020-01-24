@@ -717,7 +717,6 @@ def on_draw():
         elif human_times_hit == 1:
             alien_lives(915, 580)
             alien_lives(940, 580)
-            # arcade.sound.play_sound(lost_life_sound)
 
         elif human_times_hit == 2:
             alien_lives(940, 580)
