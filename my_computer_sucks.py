@@ -331,7 +331,7 @@ Arguments:
     y {int} -- between 0 and 750 inclusive
 
 Returns:
-    a eye pleasing end screen 
+    an eye pleasing end screen 
 
 """
 
