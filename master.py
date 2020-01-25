@@ -1,13 +1,10 @@
 import random
 import arcade
 
-
 WIDTH = 1000
 HEIGHT = 750
 
-#rain = arcade.ShapeElementList()
-
-# first set up empty lists
+# empty lists set up to calculate positions of dropping objects
 human_x_positions = []
 human_y_positions = []
 alien_x_positions = []
@@ -33,9 +30,6 @@ draw_meteor_rate = 2
 draw_shooting_star_rate = 1
 game_speed = 3
 
-human_times_hit = 0
-alien_times_hit = 0
-
 elapsed_time = 0
 
 start_game = True
@@ -43,48 +37,8 @@ run_game = False
 final_stage_game = False
 end_game = False
 
-if 19.00 < elapsed_time < 21.00 or 39.00 < elapsed_time < 41.00:
-    draw_enemy_rate += 1
-    draw_meteor_rate += 1
-
-for _ in range(draw_enemy_rate):
-# generate random x and y values
-    x_human = random.randrange(WIDTH/2 + 75, WIDTH - 75)
-    y_human = random.randrange(HEIGHT, HEIGHT * 2)
-    x_alien = random.randrange(75, WIDTH/2 - 75)
-    y_alien = random.randrange(HEIGHT, HEIGHT * 2)
-
-# append the x and y values to the appropriate list
-    human_x_positions.append(x_human)
-    human_y_positions.append(y_human)
-    alien_x_positions.append(x_alien)
-    alien_y_positions.append(y_alien)
-
-# this is the meteor's repeat, and i made it a little less than the humans/aliens so there's less of them
-for _ in range(draw_meteor_rate):
-    # generate random x and y values
-    x_meteor = random.randrange(WIDTH/2 + 75, WIDTH - 75)
-    y_meteor = random.randrange(HEIGHT, HEIGHT + 50)
-    x_alien_meteor = random.randrange(75, WIDTH/2 - 75)
-    y_alien_meteor = random.randrange(HEIGHT, HEIGHT + 50)
-
-    # append the x and y values to the appropriate list
-    meteor_x_positions.append(x_meteor)
-    meteor_y_positions.append(y_meteor)
-    alien_meteor_x_positions.append(x_alien_meteor)
-    alien_meteor_y_positions.append(y_alien_meteor)
-
-for _ in range(draw_shooting_star_rate):
-    x_human_shooting_star = random.randrange(WIDTH/2 + 75, WIDTH - 75)
-    y_human_shooting_star = random.randrange(HEIGHT, HEIGHT + 50)
-    x_alien_shooting_star = random.randrange(75, WIDTH/2 - 75)
-    y_alien_shooting_star = random.randrange(HEIGHT, HEIGHT + 50)
-
-    # append the x and y values to the appropriate list
-    human_x_positions_shooting_star.append(x_human_shooting_star)
-    human_y_positions_shooting_star.append(y_human_shooting_star)
-    alien_x_positions_shooting_star.append(x_alien_shooting_star)
-    alien_y_positions_shooting_star.append(y_alien_shooting_star)
+human_times_hit = 0
+alien_times_hit = 0
 
 spaceship_human_x = 750
 spaceship_human_y = 100
@@ -143,17 +97,61 @@ alien_shooting_star_delay_counter = 0
 human_shooting_star_start_time = 0
 alien_shooting_star_start_time = 0
 
+if 19.00 < elapsed_time < 21.00 or 39.00 < elapsed_time < 41.00:
+    draw_enemy_rate += 1
+    draw_meteor_rate += 1
+
+# this is the repeat for the falling astronauts/aliens
+for _ in range(draw_enemy_rate):
+# generate random x and y values
+    x_human = random.randrange(WIDTH/2 + 75, WIDTH - 75)
+    y_human = random.randrange(HEIGHT, HEIGHT * 2)
+    x_alien = random.randrange(75, WIDTH/2 - 75)
+    y_alien = random.randrange(HEIGHT, HEIGHT * 2)
+
+# append the x and y values to the appropriate list
+    human_x_positions.append(x_human)
+    human_y_positions.append(y_human)
+    alien_x_positions.append(x_alien)
+    alien_y_positions.append(y_alien)
+
+# this is the meteor's repeat, it's a little less than the humans/aliens so there's less of them
+for _ in range(draw_meteor_rate):
+    # generate random x and y values
+    x_meteor = random.randrange(WIDTH/2 + 75, WIDTH - 75)
+    y_meteor = random.randrange(HEIGHT, HEIGHT + 50)
+    x_alien_meteor = random.randrange(75, WIDTH/2 - 75)
+    y_alien_meteor = random.randrange(HEIGHT, HEIGHT + 50)
+
+    # append the x and y values to the appropriate list
+    meteor_x_positions.append(x_meteor)
+    meteor_y_positions.append(y_meteor)
+    alien_meteor_x_positions.append(x_alien_meteor)
+    alien_meteor_y_positions.append(y_alien_meteor)
+
+# this is the repeat for the shooting stars
+for _ in range(draw_shooting_star_rate):
+    x_human_shooting_star = random.randrange(WIDTH/2 + 75, WIDTH - 75)
+    y_human_shooting_star = random.randrange(HEIGHT, HEIGHT + 50)
+    x_alien_shooting_star = random.randrange(75, WIDTH/2 - 75)
+    y_alien_shooting_star = random.randrange(HEIGHT, HEIGHT + 50)
+
+    # append the x and y values to the appropriate list
+    human_x_positions_shooting_star.append(x_human_shooting_star)
+    human_y_positions_shooting_star.append(y_human_shooting_star)
+    alien_x_positions_shooting_star.append(x_alien_shooting_star)
+    alien_y_positions_shooting_star.append(y_alien_shooting_star)
 
 def update(delta_time):
-"""computes what is drawn or run in the game at a given time
+    """computes what is drawn or run in the game at a given time
 
-Arguments:
-    delta_time {float} -- represents a duration of time
+    Arguments:
+        delta_time {float} -- represents a duration of time
 
-Returns:
-    updated drawings for humans, aliens, meteors, shooting stars, human and alien lasers, and human and alien spaceships 
+    Returns:
+        updated drawings for humans, aliens, meteors, shooting stars, human and alien lasers, and human and alien spaceships 
 
-"""
+    """
     global elapsed_time, draw_enemy_rate, draw_meteor_rate, game_speed, run_game
     global human_shooting_star_delay_counter, alien_shooting_star_delay_counter, human_shooting_star_start_time, alien_shooting_star_start_time
 
@@ -304,18 +302,20 @@ Returns:
                 del alien_y_positions_laser[index - removed_alien_lasers]
                 removed_alien_lasers += 1
 
+
 def draw_main_screen(x, y):
-""""computes if the starting screen is drawn 
+    """"computes if the starting screen is drawn 
 
-Arguments:
-    x {int} -- between 0 and 1000 inclusive 
-    y {int} -- between 0 and 750 inclusive
+    Arguments:
+        x {int} -- between 0 and 1000 inclusive 
+        y {int} -- between 0 and 750 inclusive
 
-Returns:
-    a simple but artistic start screen with alien, human and meteor animation
+    Returns:
+        a simple but artistic start screen with alien, human and meteor animation
 
-"""  
-    global main_screen_alien_x, main_screen_alien_y, main_screen_human_x, main_screen_human_y, main_screen_meteor1_x, main_screen_meteor1_y, main_screen_meteor2_x, main_screen_meteor2_y, main_screen_meteor1_degree, main_screen_meteor2_degree
+    """  
+    global main_screen_alien_x, main_screen_alien_y, main_screen_human_x, main_screen_human_y, main_screen_meteor1_x, main_screen_meteor1_y 
+    global main_screen_meteor2_x, main_screen_meteor2_y, main_screen_meteor1_degree, main_screen_meteor2_degree
 
     scale = 0.3
     texture = arcade.load_texture("space.png")
@@ -368,16 +368,16 @@ Returns:
 
 
 def draw_end_screen(x, y):
-""""determines if the end screen is drawn 
+    """"determines if the end screen is drawn 
 
-Arguments:
-    x {int} -- between 0 and 1000 inclusive 
-    y {int} -- between 0 and 750 inclusive
+    Arguments:
+        x {int} -- between 0 and 1000 inclusive 
+        y {int} -- between 0 and 750 inclusive
 
-Returns:
-    an eye pleasing end screen 
+    Returns:
+        an eye pleasing end screen 
 
-"""
+    """
     global alien_points, human_points, elapsed_time
 
     scale = 1.1
@@ -402,16 +402,16 @@ Returns:
 
 
 def draw_background(x, y):
-""""determines if a background image is drawn
+    """"determines if a background image is drawn
 
-Arguments:
-    x {int} -- between 0 and 1000 inclusive 
-    y {int} -- between 0 and 750 inclusive
+    Arguments:
+        x {int} -- between 0 and 1000 inclusive 
+        y {int} -- between 0 and 750 inclusive
 
-Returns:
-    a beautiful space image is drawn as the background of our game 
+    Returns:
+        a beautiful space image is drawn as the background of our game 
 
-"""
+    """
     scale = 1
     texture = arcade.load_texture("night_sky.jpg")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -419,38 +419,38 @@ Returns:
 
 
 def alien_points_counter():
-""""computes and shows the number of points for the human spaceship side (the side shooting the aliens)
+    """"computes and shows the number of points for the human spaceship side (the side shooting the aliens)
 
-Returns:
-    arcade drawing of the number of points the player has accumulated so far
+    Returns:
+        arcade drawing of the number of points the player has accumulated so far
 
-"""
+    """
     arcade.draw_text("Points: " + str(alien_points),
                      50, 600, arcade.color.WHITE, 15)
 
 
 def human_points_counter():
-""""computes and shows the number of points for the alien spaceship side (the side shooting the humans)
+    """"computes and shows the number of points for the alien spaceship side (the side shooting the humans)
 
-Returns:
-    arcade drawing of the number of points the player has accumulated so far
+    Returns:
+        arcade drawing of the number of points the player has accumulated so far
 
-"""
+    """
     arcade.draw_text("Points: " + str(human_points),
                      880, 600, arcade.color.WHITE, 15)
 
 
 def alien_lives(x, y):
-""""drawns out the heart images to represent alien lives
+    """"drawns out the heart images to represent alien lives
 
-Arguments:
-    x {int} -- between 62 and 112 inclusive 
-    y {int} -- at 580
+    Arguments:
+        x {int} -- between 62 and 112 inclusive 
+        y {int} -- at 580
 
-Returns:
-    arcade drawing of the number of lives that the aliens have left
+    Returns:
+        arcade drawing of the number of lives that the aliens have left
 
-"""
+    """
     scale = 0.06
     texture = arcade.load_texture("heart.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -458,16 +458,16 @@ Returns:
 
 
 def human_lives(x, y):
-""""draws out the heart images to represent alien lives
+    """"draws out the heart images to represent alien lives
 
-Arguments:
-    x {int} -- between 890 and 940 inclusive 
-    y {int} -- at 580
+    Arguments:
+        x {int} -- between 890 and 940 inclusive 
+        y {int} -- at 580
 
-Returns:
-    arcade drawing of the number of lives that the humans have left
+    Returns:
+        arcade drawing of the number of lives that the humans have left
 
-"""
+    """
     scale = 0.06
     texture = arcade.load_texture("heart.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -475,16 +475,16 @@ Returns:
 
 
 def draw_human(x, y):
-""""draws humans
+    """"draws humans
 
-Arguments:
-    x {int} -- between 505 and 1000 inclusive
-    y {int} -- starts at 800
+    Arguments:
+        x {int} -- between 505 and 1000 inclusive
+        y {int} -- starts at 800
 
-Returns:
-    picture of an astronaut set to a certain scale
+    Returns:
+        picture of an astronaut set to a certain scale
 
-"""
+    """
     scale = 0.05
     texture = arcade.load_texture("astronaut.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -492,15 +492,15 @@ Returns:
 
 
 def draw_alien(x, y):
-""""draws aliens
-Arguments:
-    x {int} -- between 0 and 495 inclusive
-    y {int} -- starts at 800
+    """"draws aliens
+    Arguments:
+        x {int} -- between 0 and 495 inclusive
+        y {int} -- starts at 800
 
-Returns:
-    picture of an alien set to a certain scale
+    Returns:
+        picture of an alien set to a certain scale
 
-"""
+    """
     scale = 0.05
     texture = arcade.load_texture("alien.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -508,16 +508,16 @@ Returns:
 
 
 def draw_human_laser(x, y):
-""""draws lasers to hit the humans 
+    """"draws lasers to hit the humans 
 
-Arguments:
-    x {int} -- between 505 and 1000 inclusive
-    y {int} -- starts at 100
+    Arguments:
+        x {int} -- between 505 and 1000 inclusive
+        y {int} -- starts at 100
 
-Returns:
-    picture of a laser set to a certain scale
+    Returns:
+        picture of a laser set to a certain scale
 
-"""
+    """
     scale = 0.1
     texture = arcade.load_texture("laser.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -525,15 +525,15 @@ Returns:
 
 
 def draw_alien_laser(x, y):
-""""draws lasers to hit the aliens 
-Arguments:
-    x {int} -- between 0 and 495 inclusive
-    y {int} -- starts at 100
+    """"draws lasers to hit the aliens 
+    Arguments:
+        x {int} -- between 0 and 495 inclusive
+        y {int} -- starts at 100
 
-Returns:
-    picture of a laser set to a certain scale
+    Returns:
+        picture of a laser set to a certain scale
 
-"""
+    """
     scale = 0.1
     texture = arcade.load_texture("laser.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -541,16 +541,16 @@ Returns:
 
 
 def draw_human_meteor(x, y):
-""""draws meteors for the human side of the game
+    """"draws meteors for the human side of the game
 
-Arguments:
-    x {int} -- between 505 and 1000 inclusive
-    y {int} -- starts at 800
+    Arguments:
+        x {int} -- between 505 and 1000 inclusive
+        y {int} -- starts at 800
 
-Returns:
-    picture of a meteor that is set to a certain scale 
+    Returns:
+        picture of a meteor that is set to a certain scale 
 
-"""
+    """
     scale = 0.05
     texture = arcade.load_texture("meteor.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -558,16 +558,16 @@ Returns:
 
 
 def draw_alien_meteor(x, y):
-""""draws meteors for the alien side of the game 
+    """"draws meteors for the alien side of the game 
 
-Arguments:
-    x {int} -- between 0 and 495 inclusive
-    y {int} -- starts at 800
+    Arguments:
+        x {int} -- between 0 and 495 inclusive
+        y {int} -- starts at 800
 
-Returns:
-    picture of a meteor that is set to a certain scale 
+    Returns:
+        picture of a meteor that is set to a certain scale 
 
-"""
+    """
     scale = 0.05
     texture = arcade.load_texture("meteor.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -575,16 +575,16 @@ Returns:
 
 
 def draw_human_shooting_star(x, y):
-""""draws shooting stars for the human side of the game
+    """"draws shooting stars for the human side of the game
 
-Arguments:
-    x {int} -- between 505 and 1000 inclusive
-    y {int} -- starts at 800
+    Arguments:
+        x {int} -- between 505 and 1000 inclusive
+        y {int} -- starts at 800
 
-Returns:
-    picture of a shooting star that is set to a certain scale 
+    Returns:
+        picture of a shooting star that is set to a certain scale 
 
-"""
+    """
     scale = 0.06
     texture = arcade.load_texture("shooting star.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -592,16 +592,16 @@ Returns:
 
 
 def draw_alien_shooting_star(x, y):
-""""draws shooting stars for the alien side of the game 
+    """"draws shooting stars for the alien side of the game 
 
-Arguments:
-    x {int} -- between 0 and 495 inclusive
-    y {int} -- starts at 800
+    Arguments:
+        x {int} -- between 0 and 495 inclusive
+        y {int} -- starts at 800
 
-Returns:
-    picture of a shooting star that is set to a certain scale 
+    Returns:
+        picture of a shooting star that is set to a certain scale 
 
-"""
+    """
     scale = 0.06
     texture = arcade.load_texture("shooting star.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -609,16 +609,16 @@ Returns:
 
 
 def draw_spaceship_human(x, y):
-""""draws a spaceship for the human side of the game
+    """"draws a spaceship for the human side of the game
 
-Arguments:
-    x {int} -- between 505 and 1000 inclusive
-    y {int} -- stationed at 100
+    Arguments:
+        x {int} -- between 505 and 1000 inclusive
+        y {int} -- stationed at 100
 
-Returns:
-    picture of a spaceship that is set to a certain scale 
+    Returns:
+        picture of a spaceship that is set to a certain scale 
 
-"""
+    """
     scale = 0.4
     texture = arcade.load_texture("spaceship.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -626,16 +626,16 @@ Returns:
 
 
 def draw_spaceship_alien(x, y):
-""""draws a spaceship for the alien side of the game 
+    """"draws a spaceship for the alien side of the game 
 
-Arguments:
-    x {int} -- between 0 and 495 inclusive
-    y {int} -- stationed at 100
+    Arguments:
+        x {int} -- between 0 and 495 inclusive
+        y {int} -- stationed at 100
 
-Returns:
-    picture of a spaceship that is set to a certain scale 
+    Returns:
+        picture of a spaceship that is set to a certain scale 
 
-"""
+    """
     scale = 0.4
     texture = arcade.load_texture("spaceship.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -643,6 +643,16 @@ Returns:
 
 
 def draw_final_human(x, y):
+    """"draws a big astronaut for the final stage
+
+    Arguments:
+        x {int} -- between 505 and 1000 inclusive
+        y {int} -- stationed at 375
+
+    Returns:
+        picture of an astronaut that is set to a certain scale 
+
+    """
     scale = 0.3
     texture = arcade.load_texture("astronaut.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -650,6 +660,16 @@ def draw_final_human(x, y):
 
 
 def draw_final_alien(x, y):
+    """"draws a big alien for the final stage
+
+    Arguments:
+        x {int} -- between 0 and 495 inclusive
+        y {int} -- stationed at 375
+
+    Returns:
+        picture of an alien that is set to a certain scale 
+
+    """
     scale = 0.3
     texture = arcade.load_texture("alien.png")
     arcade.draw_texture_rectangle(x, y, scale * texture.width,
@@ -657,6 +677,12 @@ def draw_final_alien(x, y):
 
 
 def pause_screen():
+    """"draws a pause screen
+
+    Returns:
+        picture of a black pause screen activated in the middle of the game
+
+    """
     scale = 0.5
     texture = arcade.load_texture("pause_screen.jpg")
     arcade.draw_texture_rectangle(500, 350, scale * texture.width,
@@ -664,12 +690,12 @@ def pause_screen():
 
 
 def add_more_humans():
-""""adds more humans randomly within a certain range
+    """"adds more humans randomly within a certain range
 
-Returns:
-    picture of humans that fall randomly
+    Returns:
+        picture of humans that fall randomly
 
-"""
+    """
     global human_x_positions, human_y_positions
 
     # generate random x and y values
@@ -682,12 +708,12 @@ Returns:
 
 
 def add_more_aliens():
-""""adds more aliens randomly within a certain range
+    """"adds more aliens randomly within a certain range
 
-Returns:
-    pictures of aliens that fall randomly
+    Returns:
+        pictures of aliens that fall randomly
 
-"""
+    """
     global alien_x_positions, alien_y_positions
 
     # generate random x and y values
@@ -700,12 +726,12 @@ Returns:
 
 
 def add_more_meteors():
-""""adds more meteors randomly within a certain range
+    """"adds more meteors randomly within a certain range
 
-Returns:
-    pictures of meteors that fall randomly on the human side
+    Returns:
+        pictures of meteors that fall randomly on the human side
 
-"""
+    """
     global meteor_x_positions, meteor_y_positions
 
     x_meteor = random.randrange(WIDTH/2 + 75, WIDTH - 75)
@@ -716,12 +742,12 @@ Returns:
 
 
 def add_more_alien_meteors():
-""""adds more meteors randomly within a certain range
+    """"adds more meteors randomly within a certain range
 
-Returns:
-    pictures of meteors that fall randomly on the alien side
+    Returns:
+        pictures of meteors that fall randomly on the alien side
 
-"""
+    """
     global alien_meteor_x_positions, alien_meteor_y_positions
 
     x_alien_meteor = random.randrange(75, WIDTH/2 - 75)
@@ -732,12 +758,12 @@ Returns:
 
 
 def add_more_human_shooting_stars():
-""""adds more shooting stars randomly within a certain range
+    """"adds more shooting stars randomly within a certain range
 
-Returns:
-    pictures of shooting stars that fall randomly on the human side
+    Returns:
+        pictures of shooting stars that fall randomly on the human side
 
-"""
+    """
     x_human_shooting_star = random.randrange(WIDTH/2 + 75, WIDTH - 75)
     y_human_shooting_star = random.randrange(HEIGHT, HEIGHT + 50)
     
@@ -747,12 +773,12 @@ Returns:
 
 
 def add_more_alien_shooting_stars():
-""""adds more shooting stars randomly within a certain range
+    """"adds more shooting stars randomly within a certain range
 
-Returns:
-    pictures of shooting stars that fall randomly on the alien side
+    Returns:
+        pictures of shooting stars that fall randomly on the alien side
 
-"""
+    """
     x_alien_shooting_star = random.randrange(75, WIDTH/2 - 75)
     y_alien_shooting_star = random.randrange(HEIGHT, HEIGHT + 50)
     
@@ -762,13 +788,13 @@ Returns:
 
 
 def laser_human_collision():
-""""computes if the alien's lasers will collide with the humans
+    """"computes if the alien's lasers will collide with the humans
 
-Returns:
-    deletes the laser and human it collided with if there is a collision, and 
-    if there isn't, 1 will be added to the human laser index and the human index
+    Returns:
+        deletes the laser and human it collided with if there is a collision, and 
+        if there isn't, 1 will be added to the human laser index and the human index
 
-"""
+    """
     global human_x_positions_laser, human_y_positions_laser
     global x_human_laser, y_human_laser
     global human_width, human_height, human_points
@@ -796,13 +822,13 @@ Returns:
 
 
 def laser_alien_collision():
-""""computes if the human's lasers will collide with the aliens
+    """"computes if the human's lasers will collide with the aliens
 
-Returns:
-    deletes the laser and alien it collided with if there is a collision, and if 
-    there isn't, 1 will be added to the alien laser index and the alien index
+    Returns:
+        deletes the laser and alien it collided with if there is a collision, and if 
+        there isn't, 1 will be added to the alien laser index and the alien index
 
-"""
+    """
     global alien_x_positions_laser, alien_y_positions_laser
     global x_alien_laser, y_alien_laser
     global alien_width, alien_height, alien_points
@@ -831,12 +857,12 @@ Returns:
 
 
 def meteor_spaceship_collision():
-""""computes if the falling meteors will hit the human spaceship 
+    """"computes if the falling meteors will hit the human spaceship 
 
-Returns:
-    deletes the meteor if it hits the spaceship and generates more meteors to replace the ones deleted
+    Returns:
+        deletes the meteor if it hits the spaceship and generates more meteors to replace the ones deleted
 
-"""
+    """
     global spaceship_human_x, spaceship_human_y
     global meteor_x_positions, meteor_y_positions
     global spaceship_width, spaceship_height
@@ -861,13 +887,14 @@ Returns:
         else:
             meteor_index += 1
 
+
 def alien_meteor_spaceship_collision():
-""""computes if the falling meteors will hit the alien spaceship 
+    """"computes if the falling meteors will hit the alien spaceship 
 
-Returns:
-    deletes the meteor if it hits the spaceship and generates more meteors to replace the ones deleted
+    Returns:
+        deletes the meteor if it hits the spaceship and generates more meteors to replace the ones deleted
 
-"""
+    """
     global spaceship_alien_x, spaceship_alien_y
     global alien_meteor_x_positions, alien_meteor_y_positions
     global spaceship_width, spaceship_height
@@ -891,18 +918,18 @@ Returns:
         else:
             alien_meteor_index += 1
 
+
 def laser_human_shooting_star_collision():
-""""computes if the lasers will hit the shooting shars on the human side
+    """"computes if the lasers will hit the shooting shars on the human side
 
-Returns:
-    deletes the laser and shooting star it collided with if there is a collision, and if 
-    there isn't, 1 will be added to the human laser index and the human shooting star index
+    Returns:
+        deletes the laser and shooting star it collided with if there is a collision, and if 
+        there isn't, 1 will be added to the human laser index and the human shooting star index
 
-"""
+    """
     global human_x_positions_laser, human_y_positions_laser
     global x_human_laser, y_human_laser
     global human_shooting_star_width, human_shooting_star_height, human_times_hit, human_points
-
 
     human_shooting_star_index = 0
 
@@ -932,13 +959,13 @@ Returns:
 
 
 def laser_alien_shooting_star_collision():
-""""computes if the lasers will hit the shooting shars on the alien side
+    """"computes if the lasers will hit the shooting shars on the alien side
 
-Returns:
-    deletes the laser and shooting star it collided with if there is a collision, and if 
-    there isn't, 1 will be added to the human laser index and the alien shooting star index
+    Returns:
+        deletes the laser and shooting star it collided with if there is a collision, and if 
+        there isn't, 1 will be added to the human laser index and the alien shooting star index
 
-"""
+    """
     global alien_x_positions_laser, alien_y_positions_laser
     global x_alien_laser, y_alien_laser
     global alien_shooting_star_width, alien_shooting_star_height, alien_times_hit, alien_points
@@ -971,13 +998,14 @@ Returns:
 
 
 def on_draw():
-""""draws out and runs the different elements in the game 
+    """"draws out and runs the different elements in the game 
 
-Returns:
-    if various boolean variables are true, stages of the game will be drawn out and run
+    Returns:
+        if various boolean variables are true, stages of the game will be drawn out and run
 
-"""
-    global spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, start_game, run_game, end_game, final_stage_game, elapsed_time, draw_enemy_rate, draw_meteor_rate
+    """
+    global spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, start_game
+    global run_game, end_game, final_stage_game, elapsed_time, draw_enemy_rate, draw_meteor_rate
 
     arcade.start_render()
 
@@ -1131,16 +1159,18 @@ Returns:
 
 
 def on_key_press(key, modifiers):
-""""computes if a key is pressed and if it is, the action assigned to the key is executed
+    """"computes if a key is pressed and if it is, the action assigned to the key is executed
 
-Arguments:
-    key {str} -- the key on a computer keyboard that is pressed 
-    modifiers {str} -- a key that changes execution if pressed in combination with other keys
+    Arguments:
+        key {str} -- the key on a computer keyboard that is pressed 
+        modifiers {str} -- a key that changes execution if pressed in combination with other keys
 
-Returns:
-    the action that is assigned to the key is executed 
-"""
-    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, fire_laser_human, fire_laser_alien, spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, run_game, time, delta_time, start_game, run_game, end_game
+    Returns:
+        the action that is assigned to the key is executed 
+    """
+    global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, fire_laser_human 
+    global fire_laser_alien, spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y 
+    global run_game, time, delta_time, start_game, run_game, end_game
 
     laser_sound = arcade.load_sound("laser.wav")
 
@@ -1181,15 +1211,15 @@ Returns:
 
         
 def on_key_release(key, modifiers):
-""""computes if a key is released after being pressed and if it is, no new action is executed 
+    """"computes if a key is released after being pressed and if it is, no new action is executed 
 
-Arguments:
-    key {str} -- the key on a computer keyboard that is released or not pressed 
-    modifiers {str} -- allows the key released commands to be accessed 
+    Arguments:
+        key {str} -- the key on a computer keyboard that is released or not pressed 
+        modifiers {str} -- allows the key released commands to be accessed 
 
-Returns:
-    the execution of the action that was assigned to the key is stopped
-"""
+    Returns:
+        the execution of the action that was assigned to the key is stopped
+    """
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, laser_fire_key
 
     if key == arcade.key.LEFT:
@@ -1212,12 +1242,12 @@ Returns:
     
 
 def setup():
-""""the main set-up function before the final code is executed 
+    """"the main set-up function before the final code is executed 
 
-Returns:
-    the arcade windown is drawn, functions override the typical arcade functions, 
-    the schedule is set, the game runs
-"""
+    Returns:
+        the arcade windown is drawn, functions override the typical arcade functions, 
+        the schedule is set, the game runs
+    """
     arcade.open_window(1000, 750, "Astronauts VS Aliens!")
 
     window = arcade.get_window()
