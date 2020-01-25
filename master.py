@@ -213,10 +213,10 @@ def update(delta_time):
                         alien_y_positions_shooting_star[index] = random.randrange(HEIGHT, HEIGHT + 50)
                         alien_x_positions_shooting_star[index] = random.randrange(75, WIDTH/2 - 75)
 
-        if elapsed_time == 20.00 or elapsed_time == 40.00:
-            game_speed += 0.8
+        if 19.99 <= elapsed_time <= 20.00 or 39.99 <= elapsed_time <= 40.00:
+            game_speed += 0.5
         elif elapsed_time > 60.00:
-            game_speed = 4.9
+            game_speed = 5
 
         global human_hit, alien_hit
 
@@ -919,6 +919,60 @@ def alien_meteor_spaceship_collision():
             alien_meteor_index += 1
 
 
+def human_final_stage_collision():
+    """"computes if the alien's lasers will collide with the big human
+
+    Returns:
+        deletes the laser and adds points if there is a collision, and if 
+        there isn't, 1 will be added to the alien laser index
+
+    """
+    global human_x_positions_laser, human_y_positions_laser
+    global x_human_laser, y_human_laser
+    global human_points
+
+    human_laser_index = 0
+    hit_sound = arcade.load_sound("hit.wav")
+
+    for x_human_laser, y_human_laser in zip(human_x_positions_laser, human_y_positions_laser):
+        
+        if (700 <= x_human_laser <= 800) and (370 <= y_human_laser <= 380):
+
+            del human_x_positions_laser[human_laser_index]
+            del human_y_positions_laser[human_laser_index]
+            
+            arcade.sound.play_sound(hit_sound)
+            human_points += 10
+            continue
+
+
+def alien_final_stage_collision():
+    """"computes if the human's lasers will collide with the big alien
+
+    Returns:
+        deletes the laser and adds points if there is a collision, and if 
+        there isn't, 1 will be added to the alien laser index        
+
+    """
+    global alien_x_positions_laser, alien_y_positions_laser
+    global x_alien_laser, y_alien_laser
+    global alien_points
+
+    alien_laser_index = 0
+    hit_sound = arcade.load_sound("hit.wav")
+
+    for x_alien_laser, y_alien_laser in zip(alien_x_positions_laser, alien_y_positions_laser):
+        
+        if (200 <= x_alien_laser <= 300) and (370 <= y_alien_laser <= 380):
+
+            del alien_x_positions_laser[alien_laser_index]
+            del alien_y_positions_laser[alien_laser_index]
+            
+            arcade.sound.play_sound(hit_sound)
+            alien_points += 10
+            continue
+
+
 def laser_human_shooting_star_collision():
     """"computes if the lasers will hit the shooting shars on the human side
 
@@ -1013,6 +1067,7 @@ def on_draw():
         draw_main_screen(500, 375)
     
     if run_game:
+        
         start_game = False
 
         draw_background(500, 375)
@@ -1097,14 +1152,7 @@ def on_draw():
         elif alien_times_hit == 2:
             alien_lives(112, 580)
 
-    if 103 <= elapsed_time <= 105:
-        final_stage_game = True
-        run_game = False
-        
-        arcade.draw_rectangle_filled(500, 375, 5000, 100, arcade.color.YELLOW)
-        arcade.draw_text("FINAL BOSS", 310, 342, arcade.color.BLACK, 65)
-    
-    if elapsed_time >= 103:
+    if 103 <= elapsed_time <= 122:
         final_stage_game = True
         run_game = False
 
@@ -1129,13 +1177,22 @@ def on_draw():
         draw_final_alien(250, 375)
         draw_final_human(750, 375)
 
-        if 116 <= elapsed_time <= 119:
+        human_final_stage_collision()
+        alien_final_stage_collision()
+        
+        if 103 <= elapsed_time <= 106:
+            arcade.draw_rectangle_filled(500, 375, 400, 100, arcade.color.YELLOW)
+            arcade.draw_text("FINAL BOSS", 310, 342, arcade.color.BLACK, 65)
+
+        elif 116 <= elapsed_time <= 119:
             arcade.draw_rectangle_filled(500, 375, 50, 100, arcade.color.BLACK)
             arcade.draw_text(str(int(120 - elapsed_time)), 475, 342, arcade.color.WHITE, 65)
-
-    if elapsed_time >= 120:
-        arcade.draw_rectangle_filled(500, 375, 390, 100, arcade.color.BLACK)
-        arcade.draw_text("TIME'S UP!", 320, 342, arcade.color.WHITE, 65)
+        
+        elif elapsed_time >= 120:
+            arcade.draw_rectangle_filled(500, 375, 390, 100, arcade.color.BLACK)
+            arcade.draw_text("TIME'S UP!", 320, 342, arcade.color.WHITE, 65)
+    
+    elif elapsed_time >= 121:
         final_stage_game = False
         end_game == True
     
