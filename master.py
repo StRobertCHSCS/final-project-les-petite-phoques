@@ -1265,7 +1265,7 @@ def on_key_release(key, modifiers):
     """"computes if a key is released after being pressed and if it is, no new action is executed 
 
     Arguments:
-        key {str} -- the key on a computer keyboard that is released or not pressed 
+        key {str} -- the key on a computer keyboard that is released or no longer pressed 
         modifiers {str} -- allows the key released commands to be accessed 
 
     Returns:
