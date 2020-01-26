@@ -615,7 +615,6 @@ def add_more_humans():
     Returns:
         picture of humans that fall randomly
     """
-    
     global human_x_positions, human_y_positions
 
     # when a human position is deleted from the list via being shot, adds a human back

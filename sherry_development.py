@@ -49,6 +49,7 @@ spaceship_human_y = 100
 spaceship_alien_x = 250
 spaceship_alien_y = 100
 
+# sets a width and height for each object in the game
 alien_width = 60
 alien_height = 74
 human_width = 60
