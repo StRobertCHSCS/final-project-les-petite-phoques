@@ -71,7 +71,7 @@ spaceship_human_y = 100
 spaceship_alien_x = 250
 spaceship_alien_y = 100
 
-#set width and height for each object in the game
+# set width and height for each object in the game
 alien_width = 60
 alien_height = 74
 human_width = 60
@@ -297,7 +297,7 @@ def draw_main_screen(x: int, y: int):
     """  
     global main_screen_alien_x, main_screen_alien_y, main_screen_human_x, main_screen_human_y
     global main_screen_meteor1_x, main_screen_meteor2_x, main_screen_meteor1_degree, main_screen_meteor2_degree
-    
+
     # sets a new background, draws title text
     scale = 0.3
     texture = arcade.load_texture("space.png")
