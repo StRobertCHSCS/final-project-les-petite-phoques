@@ -55,6 +55,16 @@ run_game = False
 final_stage_game = False
 end_game = False
 
+# coordinates of elements on the main screen
+main_screen_alien_x = 10
+main_screen_alien_y = 10
+main_screen_human_x = 10
+main_screen_human_y = 740
+main_screen_meteor1_x = 0
+main_screen_meteor2_x = 1000
+main_screen_meteor1_degree = 0
+main_screen_meteor2_degree = 0
+
 # coordinates of the spaceships at the beginning of the game
 spaceship_human_x = 750
 spaceship_human_y = 100
@@ -285,16 +295,9 @@ def draw_main_screen(x: int, y: int):
         a simple but artistic start screen with alien, human and meteor animation
     
     """  
-    # coordinates of elements on the main screen
-    main_screen_alien_x = 10
-    main_screen_alien_y = 10
-    main_screen_human_x = 10
-    main_screen_human_y = 740
-    main_screen_meteor1_x = 0
-    main_screen_meteor2_x = 1000
-    main_screen_meteor1_degree = 0
-    main_screen_meteor2_degree = 0
-
+    global main_screen_alien_x, main_screen_alien_y, main_screen_human_x, main_screen_human_y
+    global main_screen_meteor1_x, main_screen_meteor2_x, main_screen_meteor1_degree, main_screen_meteor2_degree
+    
     # sets a new background, draws title text
     scale = 0.3
     texture = arcade.load_texture("space.png")
