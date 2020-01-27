@@ -1235,7 +1235,7 @@ def on_draw():
         # text comes up to tell the players that time is up
         elif elapsed_time >= 120:
             arcade.draw_rectangle_filled(500, 375, 390, 100, arcade.color.BLACK)
-            arcade.draw_text("TIME'S UP!", 320, 342, arcade.color.WHITE, 65)
+            arcade.draw_text("TIME'S UP!", 280, 342, arcade.color.WHITE, 65)
 
     # after about 120 seconds of gameplay, the game ends and the end screen appears
     if elapsed_time >= 121:
