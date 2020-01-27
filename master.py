@@ -54,6 +54,7 @@ start_game = True
 run_game = False
 final_stage_game = False
 end_game = False
+pause = False
 
 # coordinates of elements on the main screen
 main_screen_alien_x = 10
@@ -168,11 +169,11 @@ def update(delta_time: float):
     """
     global elapsed_time, draw_enemy_rate, draw_meteor_rate, game_speed, run_game
     global human_shooting_star_delay_counter, alien_shooting_star_delay_counter
-    global human_shooting_star_start_time, alien_shooting_star_start_time, human_hit, alien_hit
+    global human_shooting_star_start_time, alien_shooting_star_start_time, human_hit, alien_hit, restart
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, spaceship_human_x, spaceship_alien_x
 
     if run_game or final_stage_game: # events apply for both the normal game and the final stage
-        
+
         # calculates elapsed_time based on delta_time variable
         elapsed_time += delta_time
         elapsed_time = round(elapsed_time, 2)
@@ -370,7 +371,6 @@ def draw_end_screen(x: int, y: int):
                                   scale * texture.height, texture, 0)
 
     arcade.draw_text("GAME OVER!", 270, 500, arcade.color.WHITE, 65)
-    arcade.draw_text("press enter to restart", 350, 100, arcade.color.WHITE, 25)
 
     # computes who won the game based on lives lost/points gathered, and draws the appropriate text
     if human_times_hit >= 3:
@@ -1078,8 +1078,8 @@ def on_draw():
         if various boolean variables are true, stages of the game will be drawn out and run
     
     """
-    global spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, start_game
-    global run_game, end_game, final_stage_game, elapsed_time, draw_enemy_rate, draw_meteor_rate
+    global spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y, start_game, pause
+    global run_game, end_game, final_stage_game, elapsed_time, draw_enemy_rate, draw_meteor_rate, end_screen_elapsed_time
 
     # starts the rendering of the game
     arcade.start_render()
@@ -1228,9 +1228,10 @@ def on_draw():
             arcade.draw_text("TIME'S UP!", 320, 342, arcade.color.WHITE, 65)
     
     # after about 120 seconds of gameplay, the game ends and the end screen appears
-    elif elapsed_time >= 121:
+    if elapsed_time >= 121:
+        run_game = False
         final_stage_game = False
-        end_game == True
+        end_game = True
     
     # after one player loses all three lives, the game ends and the end screen appears
     if human_times_hit >= 3 or alien_times_hit >= 3:
@@ -1240,9 +1241,9 @@ def on_draw():
     # when end_game is activated, the end_screen is drawn
     if end_game:
         draw_end_screen(500, 375)
-    
+        
     # the pause_screen is activated when all other game stages are not (controlled by the ESC key)
-    if not run_game and not start_game and not final_stage_game and not end_game:
+    if pause:
         pause_screen()
 
 
@@ -1259,7 +1260,7 @@ def on_key_press(key, modifiers):
     """
     global left_pressed_human, left_pressed_alien, right_pressed_human, right_pressed_alien, fire_laser_human 
     global fire_laser_alien, spaceship_human_x, spaceship_human_y, spaceship_alien_x, spaceship_alien_y 
-    global run_game, time, delta_time, start_game, run_game, end_game
+    global run_game, delta_time, start_game, run_game, end_game, human_times_hit, alien_times_hit, pause
 
     laser_sound = arcade.load_sound("laser.wav")
 
@@ -1292,18 +1293,13 @@ def on_key_press(key, modifiers):
     # the space bar starts the game after the main screen
     if key == arcade.key.SPACE:
         run_game = True
+        pause = False
 
     # the escape key stops the execution of all other game stages, pausing the game
     if key == arcade.key.ESCAPE:
         run_game = False
-        start_game = False
         final_stage_game = False
-        end_game = False
-
-    # the enter key restarts the game
-    if key == arcade.key.ENTER:
-        end_game = False
-        run_game = True
+        pause = True
 
         
 def on_key_release(key, modifiers):
@@ -1338,7 +1334,7 @@ def on_key_release(key, modifiers):
 
     if key == arcade.key.UP:
         laser_fire_key = False
-    
+
 
 def setup():
     """"the main set-up function before the final code is executed 
@@ -1351,6 +1347,10 @@ def setup():
     # opens a window with specified dimensions
     arcade.open_window(WIDTH, HEIGHT, "Astronauts VS Aliens!")
 
+    # plays the theme music throughout the game
+    theme_music = arcade.Sound("theme_music.wav")
+    arcade.sound.play_sound(theme_music)
+
     # overrides the default arcade functions with our own game functions
     window = arcade.get_window()
     window.on_draw = on_draw
@@ -1362,7 +1362,6 @@ def setup():
 
     # calls the program to run all events
     arcade.run()
-
 
 # calls the main function to get the program started
 if __name__ == '__main__':
