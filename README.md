@@ -13,8 +13,8 @@ The other player is an **alien** who's needs to defeat as many **astronauts** as
 The **astronaut** player controls their spaceship with W, A, and D. 
 A and D are to move left and right, and the W key is for shooting lasers out of the spaceship.
 
-The **alien** player controls their spaceship with the Left, Right, and Up arrow keys. 
-Left and Right are to move left and right, and the Up key is for shooting lasers out of the spaceship.
+The **alien** player controls their spaceship with the LEFT, RIGHT, and UP arrow keys. 
+LEFT and RIGHT are to move left and right, and the UP key is for shooting lasers out of the spaceship.
 
 You earn points by hitting various objects that fly in your way, whether that be enemies or other special objects.
 
@@ -28,11 +28,16 @@ The goal of the game is to **score the most points**, or to **survive longer tha
 * Near the end of the game, a giant face of the enemy side will appear on your side of the screen. This is the final stage that makes or breaks a close game, and you can earn **+ 10 points** every single time you shoot this face. Spam those bullets!
 
 ## Functionality and Limitations
+### Functionality
 * To start the game, one player must press the ***space*** key at the beginning. 
 * To pause the game anytime during gameplay, press the ***esc*** key. To restart the game, press ***space***.
-* To restart the game after you've reached the end screen, press the ***enter*** key.
+* The **astronaut** player moves left and right with A and D; shoots lasers with W
+* The **alien** player moves left and right with LEFT and RIGHT; shoots lasers with UP
+
+### Limitations
 * Each character's spaceship is restricted to their side of the screen: the human spaceship on the left side, and the alien spaceship on the right. Neither can pass the black barrier in the middle of the screen.
 * The key must be pressed repeatedly to result in bullets being shot -- it cannot be held in place, as only one bullet will come out.
+* To restart the game, the game must be reloaded, which will bring you to the title screen.
 
 ## Screen Mock-Ups
 ![](screen_mock-ups.png)
